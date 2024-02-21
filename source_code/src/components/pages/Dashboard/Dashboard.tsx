@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect } from "react";
-import "./home.scss";
 import { fetchData } from "../../../configs/api.config";
 
-const HomePage: React.FC = (): JSX.Element => {
+import "./dashboard.scss";
+
+const Dashboard: React.FC = (): JSX.Element => {
   const getFetchedData = useCallback(async () => {
     const getData = await fetchData();
     console.log("getData", getData);
@@ -15,4 +16,4 @@ const HomePage: React.FC = (): JSX.Element => {
   return <div>index</div>;
 };
 
-export default HomePage;
+export default Dashboard;

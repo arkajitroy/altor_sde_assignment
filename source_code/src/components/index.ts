@@ -1,6 +1,6 @@
 // ============================= (PAGE COMPONENTS) =================================
 export { default as Error404Page } from "./pages/Error/Error404";
-export { default as HomePage } from "./pages/Home/Home";
+export { default as DashboardPage } from "./pages/Dashboard/Dashboard";
 
 // ============================= (LAYOUTS COMPONENTS) =================================
 export { default as Navbar } from "./layouts/Navbar/Navbar";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Error404Page, Footer, HomePage, Navbar, Sidebar } from "./components";
+import { Error404Page, Footer, DashboardPage, Navbar, Sidebar } from "./components";
 
 const App: React.FC = () => {
   const [showSidebar, setShowSidebar] = useState<boolean>(true);
@@ -10,7 +10,7 @@ const App: React.FC = () => {
       <Router>
         <Navbar setShowSidebar={setShowSidebar} />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<DashboardPage />} />
           <Route path="*" element={<Error404Page />} />
         </Routes>
         <Footer />
