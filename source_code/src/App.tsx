@@ -1,19 +1,25 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Error404Page, Footer, DashboardPage, Navbar, Sidebar } from "./components";
+import React, { useMemo, useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { Error404Page, Footer, DashboardPage, Navbar, Sidebar, AppLayout } from "./components";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { themeSettings } from "./globalStyles/theme";
 
 const App: React.FC = () => {
-  const [showSidebar, setShowSidebar] = useState<boolean>(true);
+  const theme = useMemo(() => createTheme(themeSettings("dark")), ["dark"]);
+
   return (
     <div className="app">
-      <Sidebar showSidebar={showSidebar} />
       <Router>
-        <Navbar setShowSidebar={setShowSidebar} />
-        <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="*" element={<Error404Page />} />
-        </Routes>
-        <Footer />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="*" element={<Error404Page />} />
+            </Route>
+          </Routes>
+        </ThemeProvider>
       </Router>
     </div>
   );
