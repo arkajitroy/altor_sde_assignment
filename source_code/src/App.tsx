@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { Error404Page, Footer, DashboardPage, Navbar, Sidebar, AppLayout } from "./components";
+import { Error404Page, DashboardPage, AppLayout, ProductRecords } from "./components";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { themeSettings } from "./globalStyles/theme";
 
@@ -16,6 +16,7 @@ const App: React.FC = () => {
             <Route element={<AppLayout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/product-records" element={<ProductRecords />} />
               <Route path="*" element={<Error404Page />} />
             </Route>
           </Routes>
