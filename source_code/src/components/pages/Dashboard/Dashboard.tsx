@@ -1,17 +1,28 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { fetchData } from "../../../configs/api.config";
 
 import "./dashboard.scss";
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import FlexBetween from "../../../globalStyles/FlexBetween";
 import Header from "../../layouts/Header/Header";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid";
 import { DownloadOutlined, Email, PersonAdd, PointOfSale, Traffic } from "@mui/icons-material";
 import StatisticsCard from "../../layouts/StatisticsCard/StatisticsCard";
 import { useTheme } from "@emotion/react";
-import { BarChart, PieChart } from "../..";
+import { BarChart, PieChart, StackedBarChart } from "../..";
+import { productsDataGridAttributes } from "../../../constants/productsDataGrid";
+import { TProductDataGrid } from "../../../@types/TGrid.types";
+
+const CustomExportToolbar = () => {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+};
 
 const Dashboard: React.FC = (): JSX.Element => {
+  const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const theme = useTheme();
   const columns: GridColDef[] = [
@@ -45,13 +56,13 @@ const Dashboard: React.FC = (): JSX.Element => {
     },
   ];
 
-  const getFetchedData = useCallback(async () => {
+  const getProductsRecordsData = useCallback(async () => {
     const getData = await fetchData();
-    console.log("getData", getData);
+    if (getData) setProductRecordsData(getData);
   }, []);
 
   useEffect(() => {
-    getFetchedData();
+    getProductsRecordsData();
   }, []);
 
   return (
@@ -133,7 +144,7 @@ const Dashboard: React.FC = (): JSX.Element => {
 
         {/* ROW 2 */}
         <Box
-          gridColumn="span 8"
+          gridColumn="span 5"
           gridRow="span 3"
           sx={{
             "& .MuiDataGrid-root": {
@@ -161,28 +172,25 @@ const Dashboard: React.FC = (): JSX.Element => {
             },
           }}
         >
-          {/* <DataGrid
-            loading={isLoading || !data}
-            getRowId={(row) => row._id as string}
-            rows={(data && data.transactions) || []}
-            columns={columns}
-          /> */}
+          <DataGrid<TProductDataGrid>
+            // loading={isLoading || !data}
+            getRowId={(row) => row.username}
+            rows={productRecordsData || []}
+            columns={productsDataGridAttributes}
+          />
         </Box>
         <Box
-          gridColumn="span 4"
+          gridColumn="span 7"
           gridRow="span 3"
           backgroundColor={theme.palette.background.alt}
           p="1.5rem"
           borderRadius="0.55rem"
+          component={""}
         >
           <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
             Sales By Category
           </Typography>
-          {/* <BreakdownPieChart isDashboard={true} /> */}
-          <Typography p="0 0.6rem" fontSize="0.8rem" sx={{ color: theme.palette.secondary[200] }}>
-            Breakdown of real states and information via category for revenue made for this year and
-            total sales.
-          </Typography>
+          <StackedBarChart />
         </Box>
       </Box>
     </Box>

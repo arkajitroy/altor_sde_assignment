@@ -12,3 +12,4 @@ export { default as AppLayout } from "./layouts/AppLayout/AppLayout";
 // ============================= (SHARED COMPONENTS) =================================
 export { default as PieChart } from "./shared/PieChart/PieChart";
 export { default as BarChart } from "./shared/BarChart/BarChart";
+export { default as StackedBarChart } from "./shared/StackedBarChart/StackedBarChart";
