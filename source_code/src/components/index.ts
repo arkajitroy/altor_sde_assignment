@@ -10,3 +10,4 @@ export { default as Sidebar } from "./layouts/Sidebar/Sidebar";
 export { default as AppLayout } from "./layouts/AppLayout/AppLayout";
 
 // ============================= (SHARED COMPONENTS) =================================
+export { default as PieChart } from "./shared/PieChart/PieChart";
