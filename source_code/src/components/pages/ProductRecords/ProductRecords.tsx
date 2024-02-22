@@ -7,6 +7,7 @@ import { productsDataGridAttributes } from "../../../constants/productsDataGrid"
 import { fetchData } from "../../../configs/api.config";
 import FlexBetween from "../../../globalStyles/FlexBetween";
 import { DownloadOutlined } from "@mui/icons-material";
+import { v4 as uuidv4 } from "uuid";
 
 const CustomExportToolbar = () => {
   return (
@@ -19,6 +20,7 @@ const CustomExportToolbar = () => {
 const ProductRecords: React.FC = (): JSX.Element => {
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
   const theme = useTheme();
+  const uniqueId = uuidv4();
 
   const getProductsRecordsData = useCallback(async () => {
     const getData = await fetchData();
@@ -35,7 +37,7 @@ const ProductRecords: React.FC = (): JSX.Element => {
         <Header title="Product Records" subtitle="All the products are listed accordingly" />
 
         <Box>
-          <Button
+          {/* <Button
             sx={{
               backgroundColor: theme.palette.secondary.light,
               color: theme.palette.background.alt,
@@ -43,10 +45,11 @@ const ProductRecords: React.FC = (): JSX.Element => {
               fontWeight: "bold",
               padding: "10px 20px",
             }}
+            onClick={}
           >
             <DownloadOutlined sx={{ mr: "10px" }} />
             Download Records
-          </Button>
+          </Button> */}
         </Box>
       </FlexBetween>
 
@@ -81,7 +84,7 @@ const ProductRecords: React.FC = (): JSX.Element => {
       >
         <DataGrid<TProductDataGrid>
           // loading={isLoading || !data}
-          getRowId={(row) => row.device_brand}
+          getRowId={(row) => row.username + uniqueId}
           rows={productRecordsData || []}
           columns={productsDataGridAttributes}
           slots={{
