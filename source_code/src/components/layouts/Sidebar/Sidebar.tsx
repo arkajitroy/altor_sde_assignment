@@ -34,55 +34,58 @@ const navItems = [
   {
     text: "Dashboard",
     icon: <HomeOutlined />,
+    routes: "/",
   },
-  {
-    text: "Client Facing",
-    icon: null,
-  },
+  // {
+  //   text: "Client Facing",
+  //   icon: null,
+  // },
   {
     text: "Products",
     icon: <ShoppingCartOutlined />,
+    routes: "/products",
   },
+  // {
+  //   text: "Customers",
+  //   icon: <Groups2Outlined />,
+  // },
   {
-    text: "Customers",
-    icon: <Groups2Outlined />,
-  },
-  {
-    text: "Transactions",
+    text: "Product Records",
     icon: <ReceiptLongOutlined />,
+    routes: "/product-records",
   },
-  {
-    text: "Sales",
-    icon: null,
-  },
-  {
-    text: "Overview",
-    icon: <PointOfSaleOutlined />,
-  },
-  {
-    text: "Daily",
-    icon: <TodayOutlined />,
-  },
-  {
-    text: "Monthly",
-    icon: <CalendarMonthOutlined />,
-  },
-  {
-    text: "Breakdown",
-    icon: <PieChartOutlined />,
-  },
-  {
-    text: "Management",
-    icon: null,
-  },
-  {
-    text: "Admin",
-    icon: <AdminPanelSettingsOutlined />,
-  },
-  {
-    text: "Performance",
-    icon: <TrendingUpOutlined />,
-  },
+  // {
+  //   text: "Sales",
+  //   icon: null,
+  // },
+  // {
+  //   text: "Overview",
+  //   icon: <PointOfSaleOutlined />,
+  // },
+  // {
+  //   text: "Daily",
+  //   icon: <TodayOutlined />,
+  // },
+  // {
+  //   text: "Monthly",
+  //   icon: <CalendarMonthOutlined />,
+  // },
+  // {
+  //   text: "Breakdown",
+  //   icon: <PieChartOutlined />,
+  // },
+  // {
+  //   text: "Management",
+  //   icon: null,
+  // },
+  // {
+  //   text: "Admin",
+  //   icon: <AdminPanelSettingsOutlined />,
+  // },
+  // {
+  //   text: "Performance",
+  //   icon: <TrendingUpOutlined />,
+  // },
 ];
 
 const Sidebar: React.FC<TSidebarProps> = ({
@@ -135,7 +138,7 @@ const Sidebar: React.FC<TSidebarProps> = ({
               </FlexBetween>
             </Box>
             <List>
-              {navItems.map(({ text, icon }) => {
+              {navItems.map(({ text, icon, routes }) => {
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
@@ -143,20 +146,19 @@ const Sidebar: React.FC<TSidebarProps> = ({
                     </Typography>
                   );
                 }
-                const lcText = text.toLowerCase();
 
                 return (
                   <ListItem key={text} disablePadding>
                     <ListItemButton
                       onClick={() => {
-                        navigate(`/${lcText}`);
-                        setActive(lcText);
+                        navigate(routes);
+                        setActive(routes);
                       }}
                       sx={{
                         backgroundColor:
-                          active === lcText ? theme.palette.secondary[300] : "transparent",
+                          active === routes ? theme.palette.secondary[300] : "transparent",
                         color:
-                          active === lcText
+                          active === routes
                             ? theme.palette.primary[600]
                             : theme.palette.secondary[100],
                       }}
@@ -165,7 +167,7 @@ const Sidebar: React.FC<TSidebarProps> = ({
                         sx={{
                           ml: "2rem",
                           color:
-                            active === lcText
+                            active === routes
                               ? theme.palette.primary[600]
                               : theme.palette.secondary[200],
                         }}
@@ -173,7 +175,7 @@ const Sidebar: React.FC<TSidebarProps> = ({
                         {icon}
                       </ListItemIcon>
                       <ListItemText primary={text} />
-                      {active === lcText && <ChevronRightOutlined sx={{ ml: "auto" }} />}
+                      {active === routes && <ChevronRightOutlined sx={{ ml: "auto" }} />}
                     </ListItemButton>
                   </ListItem>
                 );
