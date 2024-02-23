@@ -1,15 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 import { API_ROUTE } from "../../../configs/api.config";
@@ -24,13 +15,19 @@ import { TBrandDistributionPieState } from "../../../@types/TDashboard.types";
 import { zoneLists } from "../../../constants/dataProperties";
 
 import "./dashboard.scss";
+import { services } from "../../../services";
+import { TPieChartDistribution, TZoneFilter } from "../../../@types/TCharts.type";
 
 const Dashboard: React.FC = (): JSX.Element => {
-  const [zoneDistribution, setZoneDistribution] = useState<TBrandDistributionPieState>({
-    filter: "",
+  const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
+  // ================================== (DATA RENDER STATE) =====================================
+  const [deviceBrandRenderData, setDeviceBrandRenderData] = useState<TPieChartDistribution[]>([]);
+  // ================================== (DATA FILTER STATE) =====================================
+  const [deviceBrandDST, setDeviceBrandDST] = useState<TBrandDistributionPieState>({
+    filter: "Zone_1",
     dataSet: [],
   });
-  const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
+
   const [storedData, setStoredData] = useWebStorage({
     key: "apiData",
     initialValue: [],
@@ -41,20 +38,6 @@ const Dashboard: React.FC = (): JSX.Element => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const theme = useTheme();
 
-  // ======================================= (Handle Change for Filters) ====================================
-
-  const handlZonalBrandDistributionFilterChange = useCallback(
-    (event: SelectChangeEvent) => {
-      const { value } = event.target;
-      setZoneDistribution(Object.assign({}, zoneDistribution, { filter: value }));
-    },
-    [zoneDistribution]
-  );
-
-  console.log("zoneDistribution", zoneDistribution);
-
-  // ======================================================================
-
   const getProductsRecordsData = useCallback(async () => {
     try {
       if (!error && result) {
@@ -63,15 +46,64 @@ const Dashboard: React.FC = (): JSX.Element => {
         setStoredData(data);
       }
     } catch (error) {
-      console.log("Something went wrong while fetching!");
+      console.error("Something went wrong while fetching!");
     }
   }, [setStoredData]);
 
+  // ======================================= (Handle Change for Filters) ====================================
+  const handleFilterChange = useCallback(
+    (event: SelectChangeEvent, pieFilter: "device_brand" | "vehicle_brand" | "vehicle_cc") => {
+      const { value } = event.target;
+      pieFilter === "device_brand" ? setDeviceBrandDST(Object.assign({}, deviceBrandDST, { filter: value })) : null;
+    },
+    [deviceBrandDST]
+  );
+  // ======================================= (Handle Change { Initial } Data to Charts) ======================
+  const handleSetInitialDatastoPieChart = useCallback(
+    (pieFilter: "device_brand" | "vehicle_brand" | "vehicle_cc") => {
+      if (pieFilter === "device_brand") {
+        const _parsedData = productRecordsData.map(({ device_brand, zone }) => {
+          return { device_brand, zone };
+        });
+        setDeviceBrandDST(Object.assign([], deviceBrandDST, { dataSet: _parsedData }));
+        handleSetFilteredDataToPieChart(pieFilter, _parsedData, "Zone_1");
+      }
+    },
+    [productRecordsData, deviceBrandDST]
+  );
+
+  // ======================================= (Handle Change { Filtered } Data to Charts) ======================
+
+  const handleSetFilteredDataToPieChart = useCallback(
+    (
+      pieFilter: "device_brand" | "vehicle_brand" | "vehicle_cc",
+      dataSet: { device_brand: string; zone: string }[],
+      zone: TZoneFilter
+    ) => {
+      if (pieFilter === "device_brand") {
+        const _filteredData = services.filteration.getDeviceBrandCountByZone(dataSet, zone);
+        setDeviceBrandRenderData(_filteredData);
+      }
+    },
+    []
+  );
+
+  // Fetching Data from API & LocalStorage
   useEffect(() => {
-    storedData && storedData.length > 0
-      ? setProductRecordsData(storedData)
-      : getProductsRecordsData();
+    storedData && storedData.length > 0 ? setProductRecordsData(storedData) : getProductsRecordsData();
   }, [getProductsRecordsData, storedData, setProductRecordsData]);
+
+  // Setting Initial Datas for the Pie Chart
+  useEffect(() => {
+    if (deviceBrandDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("device_brand");
+  }, [deviceBrandDST.dataSet, productRecordsData, handleSetInitialDatastoPieChart]);
+
+  // Setting Filtered Datas into the Pie Chart
+  useEffect(() => {
+    if (deviceBrandDST.filter) handleSetFilteredDataToPieChart("device_brand", deviceBrandDST.dataSet, deviceBrandDST.filter);
+  }, [deviceBrandDST.filter, handleSetFilteredDataToPieChart]);
+
+  console.log("deviceBrandRenderData", deviceBrandRenderData);
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -109,17 +141,21 @@ const Dashboard: React.FC = (): JSX.Element => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={zoneDistribution.filter}
-                label="zonalDistribution"
-                onChange={handlZonalBrandDistributionFilterChange}
+                value={deviceBrandDST.filter}
+                label="Zone"
+                onChange={(event: SelectChangeEvent) => handleFilterChange(event, "device_brand")}
               >
                 {zoneLists.map(({ label, value }, index) => {
-                  return <MenuItem value={value}>{label}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={value}>
+                      {label}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
           </FlexBetween>
-          <PieChart />
+          <PieChart pieData={deviceBrandRenderData} />
         </Box>
         {/* ====================== BAR-CHART ========================*/}
         <Box
@@ -139,9 +175,9 @@ const Dashboard: React.FC = (): JSX.Element => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={zoneDistribution.filter}
+                value={deviceBrandDST.filter}
                 label="zonalDistribution"
-                onChange={handlZonalBrandDistributionFilterChange}
+                onChange={handleFilterChange}
               >
                 {zoneLists.map(({ label, value }, index) => {
                   return <MenuItem value={value}>{label}</MenuItem>;
@@ -169,9 +205,9 @@ const Dashboard: React.FC = (): JSX.Element => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={zoneDistribution.filter}
+                value={deviceBrandDST.filter}
                 label="zonalDistribution"
-                onChange={handlZonalBrandDistributionFilterChange}
+                onChange={handleFilterChange}
               >
                 {zoneLists.map(({ label, value }, index) => {
                   return <MenuItem value={value}>{label}</MenuItem>;
@@ -179,7 +215,7 @@ const Dashboard: React.FC = (): JSX.Element => {
               </Select>
             </FormControl>
           </FlexBetween>
-          <PieChart />
+          <PieChart pieData={deviceBrandRenderData} />
         </Box>
 
         {/* ================================================= ROW 2 =====================================================*/}
@@ -201,9 +237,9 @@ const Dashboard: React.FC = (): JSX.Element => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={zoneDistribution.filter}
+                value={deviceBrandDST.filter}
                 label="zonalDistribution"
-                onChange={handlZonalBrandDistributionFilterChange}
+                onChange={handleFilterChange}
               >
                 {zoneLists.map(({ label, value }, index) => {
                   return <MenuItem value={value}>{label}</MenuItem>;
@@ -211,7 +247,7 @@ const Dashboard: React.FC = (): JSX.Element => {
               </Select>
             </FormControl>
           </FlexBetween>
-          <PieChart />
+          <PieChart pieData={deviceBrandRenderData} />
         </Box>
 
         {/* ====================== STACKED-BAR-CHART ========================*/}
@@ -245,9 +281,9 @@ const Dashboard: React.FC = (): JSX.Element => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={zoneDistribution.filter}
+                value={deviceBrandDST.filter}
                 label="zonalDistribution"
-                onChange={handlZonalBrandDistributionFilterChange}
+                onChange={handleFilterChange}
               >
                 {zoneLists.map(({ label, value }, index) => {
                   return <MenuItem value={value}>{label}</MenuItem>;

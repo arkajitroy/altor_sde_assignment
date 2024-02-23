@@ -1,90 +1,126 @@
 import { ResponsivePie } from "@nivo/pie";
 import React from "react";
 
-const PieChart: React.FC = (): JSX.Element => {
-  const pieData = [
-    {
-      id: "make",
-      label: "make",
-      value: 170,
-      color: "hsl(157, 70%, 50%)",
-    },
-    {
-      id: "rust",
-      label: "rust",
-      value: 196,
-      color: "hsl(220, 70%, 50%)",
-    },
-    {
-      id: "css",
-      label: "css",
-      value: 425,
-      color: "hsl(71, 70%, 50%)",
-    },
-    {
-      id: "haskell",
-      label: "haskell",
-      value: 254,
-      color: "hsl(5, 70%, 50%)",
-    },
-    {
-      id: "stylus",
-      label: "stylus",
-      value: 358,
-      color: "hsl(237, 70%, 50%)",
-    },
-  ];
+const PieChart = ({ pieData }: any): JSX.Element => {
+  // const pieData = [
+  //   {
+  //     id: "Samsung",
+  //     label: "Samsung",
+  //     value: 170,
+  //     color: "hsl(157, 70%, 50%)",
+  //   },
+  //   {
+  //     id: "Realme",
+  //     label: "Realme",
+  //     value: 196,
+  //     color: "hsl(220, 70%, 50%)",
+  //   },
+  //   {
+  //     id: "Oppo",
+  //     label: "Oppo",
+  //     value: 425,
+  //     color: "hsl(71, 70%, 50%)",
+  //   },
+  //   {
+  //     id: "Xiaomi",
+  //     label: "Xiaomi",
+  //     value: 254,
+  //     color: "hsl(5, 70%, 50%)",
+  //   },
+  //   {
+  //     id: "Vivo",
+  //     label: "Vivo",
+  //     value: 358,
+  //     color: "hsl(237, 70%, 50%)",
+  //   },
+  //   {
+  //     id: "Oneplus",
+  //     label: "Oneplus",
+  //     value: 358,
+  //     color: "hsl(237, 70%, 50%)",
+  //   },
+  //   {
+  //     id: "Motorola",
+  //     label: "Motorola",
+  //     value: 358,
+  //     color: "hsl(237, 70%, 50%)",
+  //   },
+  //   {
+  //     id: "Asus",
+  //     label: "Asus",
+  //     value: 358,
+  //     color: "hsl(237, 70%, 50%)",
+  //   },
+  //   {
+  //     id: "Infinix",
+  //     label: "Infinix",
+  //     value: 358,
+  //     color: "hsl(237, 70%, 50%)",
+  //   },
+  // ];
 
-  const pieFill = [
-    {
-      match: {
-        id: "ruby",
-      },
-      id: "dots",
-    },
-    {
-      match: {
-        id: "c",
-      },
-      id: "dots",
-    },
-    {
-      match: {
-        id: "go",
-      },
-      id: "dots",
-    },
-    {
-      match: {
-        id: "python",
-      },
-      id: "dots",
-    },
-    {
-      match: {
-        id: "scala",
-      },
-      id: "lines",
-    },
-    {
-      match: {
-        id: "lisp",
-      },
-      id: "lines",
-    },
-    {
-      match: {
-        id: "elixir",
-      },
-      id: "lines",
-    },
-    {
-      match: {
-        id: "javascript",
-      },
-      id: "lines",
-    },
-  ];
+  // const pieFill = [
+  //   {
+  //     match: {
+  //       id: "ruby",
+  //     },
+  //     id: "dots",
+  //   },
+  //   {
+  //     match: {
+  //       id: "c",
+  //     },
+  //     id: "dots",
+  //   },
+  //   {
+  //     match: {
+  //       id: "go",
+  //     },
+  //     id: "dots",
+  //   },
+  //   {
+  //     match: {
+  //       id: "python",
+  //     },
+  //     id: "dots",
+  //   },
+  //   {
+  //     match: {
+  //       id: "scala",
+  //     },
+  //     id: "lines",
+  //   },
+  //   {
+  //     match: {
+  //       id: "lisp",
+  //     },
+  //     id: "lines",
+  //   },
+  //   {
+  //     match: {
+  //       id: "elixir",
+  //     },
+  //     id: "lines",
+  //   },
+  //   {
+  //     match: {
+  //       id: "javascript",
+  //     },
+  //     id: "lines",
+  //   },
+  //   {
+  //     match: {
+  //       id: "javascript",
+  //     },
+  //     id: "lines",
+  //   },
+  //   {
+  //     match: {
+  //       id: "javascript",
+  //     },
+  //     id: "lines",
+  //   },
+  // ];
 
   return (
     <ResponsivePie
@@ -127,7 +163,7 @@ const PieChart: React.FC = (): JSX.Element => {
           spacing: 10,
         },
       ]}
-      fill={pieFill}
+      fill={[]}
       legends={[
         {
           anchor: "bottom",
