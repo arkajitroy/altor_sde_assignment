@@ -13,10 +13,10 @@ import useWebStorage from "../../../hooks/useWebStorage";
 import useFetch from "../../../hooks/useFetch";
 import { TBrandDistributionPieState } from "../../../@types/TDashboard.types";
 import { zoneLists } from "../../../constants/dataProperties";
-
-import "./dashboard.scss";
 import { services } from "../../../services";
 import { TPieChartDistribution, TZoneFilter } from "../../../@types/TCharts.type";
+
+import "./dashboard.scss";
 
 const Dashboard: React.FC = (): JSX.Element => {
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
@@ -24,6 +24,10 @@ const Dashboard: React.FC = (): JSX.Element => {
   const [deviceBrandRenderData, setDeviceBrandRenderData] = useState<TPieChartDistribution[]>([]);
   // ================================== (DATA FILTER STATE) =====================================
   const [deviceBrandDST, setDeviceBrandDST] = useState<TBrandDistributionPieState>({
+    filter: "Zone_1",
+    dataSet: [],
+  });
+  const [vehicleBrandDST, setVehicleBrandDST] = useState<TBrandDistributionPieState>({
     filter: "Zone_1",
     dataSet: [],
   });
@@ -58,26 +62,12 @@ const Dashboard: React.FC = (): JSX.Element => {
     },
     [deviceBrandDST]
   );
-  // ======================================= (Handle Change { Initial } Data to Charts) ======================
-  const handleSetInitialDatastoPieChart = useCallback(
-    (pieFilter: "device_brand" | "vehicle_brand" | "vehicle_cc") => {
-      if (pieFilter === "device_brand") {
-        const _parsedData = productRecordsData.map(({ device_brand, zone }) => {
-          return { device_brand, zone };
-        });
-        setDeviceBrandDST(Object.assign([], deviceBrandDST, { dataSet: _parsedData }));
-        handleSetFilteredDataToPieChart(pieFilter, _parsedData, "Zone_1");
-      }
-    },
-    [productRecordsData, deviceBrandDST]
-  );
-
   // ======================================= (Handle Change { Filtered } Data to Charts) ======================
 
   const handleSetFilteredDataToPieChart = useCallback(
     (
       pieFilter: "device_brand" | "vehicle_brand" | "vehicle_cc",
-      dataSet: { device_brand: string; zone: string }[],
+      dataSet: { category: string; zone: string }[],
       zone: TZoneFilter
     ) => {
       if (pieFilter === "device_brand") {
@@ -87,6 +77,28 @@ const Dashboard: React.FC = (): JSX.Element => {
     },
     []
   );
+  // ======================================= (Handle Change { Initial } Data to Charts) ======================
+  const handleSetInitialDatastoPieChart = useCallback(
+    (pieFilter: "device_brand" | "vehicle_brand" | "vehicle_cc") => {
+      if (pieFilter === "device_brand") {
+        const _parsedData = productRecordsData.map(({ device_brand, zone }) => {
+          return { category: device_brand, zone };
+        });
+        setDeviceBrandDST(Object.assign([], deviceBrandDST, { dataSet: _parsedData }));
+        handleSetFilteredDataToPieChart(pieFilter, _parsedData, "Zone_1");
+      }
+      if (pieFilter === "vehicle_brand") {
+        const _parsedData = productRecordsData.map(({ vehicle_brand, zone }) => {
+          return { category: vehicle_brand, zone };
+        });
+        setVehicleBrandDST(Object.assign([], vehicleBrandDST, { dataSet: _parsedData }));
+        handleSetFilteredDataToPieChart(pieFilter, _parsedData, "Zone_1");
+      }
+    },
+    [productRecordsData, deviceBrandDST, vehicleBrandDST, handleSetFilteredDataToPieChart]
+  );
+
+  console.log("deviceBrandDST", deviceBrandDST);
 
   // Fetching Data from API & LocalStorage
   useEffect(() => {
@@ -96,14 +108,13 @@ const Dashboard: React.FC = (): JSX.Element => {
   // Setting Initial Datas for the Pie Chart
   useEffect(() => {
     if (deviceBrandDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("device_brand");
-  }, [deviceBrandDST.dataSet, productRecordsData, handleSetInitialDatastoPieChart]);
+    if (vehicleBrandDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("vehicle_brand");
+  }, [deviceBrandDST.dataSet, vehicleBrandDST.dataSet, productRecordsData, handleSetInitialDatastoPieChart]);
 
   // Setting Filtered Datas into the Pie Chart
   useEffect(() => {
     if (deviceBrandDST.filter) handleSetFilteredDataToPieChart("device_brand", deviceBrandDST.dataSet, deviceBrandDST.filter);
   }, [deviceBrandDST.filter, handleSetFilteredDataToPieChart]);
-
-  console.log("deviceBrandRenderData", deviceBrandRenderData);
 
   return (
     <Box m="1.5rem 2.5rem">

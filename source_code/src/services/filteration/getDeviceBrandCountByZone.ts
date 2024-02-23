@@ -2,23 +2,20 @@ import { services } from "..";
 import { TPieChartDistribution } from "../../@types/TCharts.type";
 
 type TGetDeviceBrandCountByZone = {
-  device_brand: string;
+  category: string;
   zone: string;
 };
 
-export const getDeviceBrandCountByZone = (
-  data: TGetDeviceBrandCountByZone[],
-  zone: string
-): TPieChartDistribution[] => {
+export const getDeviceBrandCountByZone = (data: TGetDeviceBrandCountByZone[], zone: string): TPieChartDistribution[] => {
   const filteredData = data.filter((item) => item.zone === zone);
   const brandCounts: { [key: string]: number } = {};
 
   // Count occurrences of each device brand in the filtered data
   filteredData.forEach((item) => {
-    if (brandCounts[item.device_brand]) {
-      brandCounts[item.device_brand]++;
+    if (brandCounts[item.category]) {
+      brandCounts[item.category]++;
     } else {
-      brandCounts[item.device_brand] = 1;
+      brandCounts[item.category] = 1;
     }
   });
 

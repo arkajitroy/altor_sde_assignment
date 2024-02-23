@@ -1,4 +1,6 @@
+import { TZoneFilter } from "./TCharts.type";
+
 export type TBrandDistributionPieState = {
-  filter: string;
+  filter: TZoneFilter;
   dataSet: any[];
 };
