@@ -6,8 +6,6 @@ import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import FlexBetween from "../../../globalStyles/FlexBetween";
 import Header from "../../layouts/Header/Header";
 import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid";
-import { DownloadOutlined, Email, PersonAdd, PointOfSale, Traffic } from "@mui/icons-material";
-import StatisticsCard from "../../layouts/StatisticsCard/StatisticsCard";
 import { useTheme } from "@emotion/react";
 import { BarChart, PieChart, StackedBarChart } from "../..";
 import { productsDataGridAttributes } from "../../../constants/productsDataGrid";
@@ -96,21 +94,9 @@ const Dashboard: React.FC = (): JSX.Element => {
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
       >
-        {/* ROW 1 */}
-        {/* <StatisticsCard
-          title="Total Customers"
-          // value={data && data.totalCustomers}
-          increase="+14%"
-          description="Since last month"
-          icon={<Email sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />}
-        /> */}
-        {/* <StatisticsCard
-          title="Sales Today"
-          // value={data && data.todayStats.totalSales}
-          increase="+21%"
-          description="Since last month"
-          icon={<PointOfSale sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />}
-        /> */}
+        {/* ================================================= ROW 1 ( 2 PIE AND 1 BAR GRAPH)=====================================================*/}
+
+        {/* ====================== PIE-CHART ========================*/}
         <Box
           gridColumn="span 4"
           gridRow="span 2"
@@ -121,16 +107,17 @@ const Dashboard: React.FC = (): JSX.Element => {
         >
           <PieChart />
         </Box>
+        {/* ====================== BAR-CHART ========================*/}
         <Box
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={theme.palette.background.alt}
-          p="0.2rem"
           borderRadius="1rem"
           component={""}
         >
           <BarChart />
         </Box>
+        {/* ====================== PIE-CHART ========================*/}
         <Box
           gridColumn="span 4"
           gridRow="span 2"
@@ -142,10 +129,37 @@ const Dashboard: React.FC = (): JSX.Element => {
           <PieChart />
         </Box>
 
-        {/* ROW 2 */}
+        {/* ================================================= ROW 2 =====================================================*/}
+        {/* ====================== PIE-CHART ========================*/}
         <Box
-          gridColumn="span 5"
-          gridRow="span 3"
+          gridColumn="span 6"
+          gridRow="span 2"
+          backgroundColor={theme.palette.background.alt}
+          p="1rem"
+          borderRadius="1rem"
+          component={""}
+        >
+          <PieChart />
+        </Box>
+
+        {/* ====================== STACKED-BAR-CHART ========================*/}
+        <Box
+          gridColumn="span 6"
+          gridRow="span 4"
+          backgroundColor={theme.palette.background.alt}
+          p="1.5rem"
+          borderRadius="0.55rem"
+          component={""}
+        >
+          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
+            Sales By Category
+          </Typography>
+          <StackedBarChart />
+        </Box>
+        {/* ====================== DATA-GRID ========================*/}
+        <Box
+          gridColumn="span 6"
+          gridRow="span 2"
           sx={{
             "& .MuiDataGrid-root": {
               border: "none",
@@ -178,19 +192,6 @@ const Dashboard: React.FC = (): JSX.Element => {
             rows={productRecordsData || []}
             columns={productsDataGridAttributes}
           />
-        </Box>
-        <Box
-          gridColumn="span 7"
-          gridRow="span 3"
-          backgroundColor={theme.palette.background.alt}
-          p="1.5rem"
-          borderRadius="0.55rem"
-          component={""}
-        >
-          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            Sales By Category
-          </Typography>
-          <StackedBarChart />
         </Box>
       </Box>
     </Box>
