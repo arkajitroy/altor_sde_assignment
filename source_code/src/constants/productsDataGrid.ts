@@ -1,7 +1,7 @@
 import { GridColDef } from "@mui/x-data-grid";
 import { TProductDataGrid } from "../@types/TGrid.types";
 
-export const productsDataGridAttributes: GridColDef<TProductDataGrid>[] = [
+export const productsDataGridAttributesOld: GridColDef<TProductDataGrid>[] = [
   {
     field: "device_brand",
     headerName: "Device Name",
@@ -45,6 +45,39 @@ export const productsDataGridAttributes: GridColDef<TProductDataGrid>[] = [
   {
     field: "zone",
     headerName: "Zone",
+    flex: 1,
+  },
+];
+
+export const productsDataGridAttributes: GridColDef<TProductDataGrid>[] = [
+  {
+    field: "username",
+    headerName: "Username",
+    flex: 1,
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 1,
+  },
+  {
+    field: "vehicle_brand",
+    headerName: "Vehicle Brand",
+    flex: 1,
+  },
+  {
+    field: "sdk_int",
+    headerName: "SDK",
+    flex: 1,
+  },
+  {
+    field: "vehicle_brand",
+    headerName: "Vehicle Brand",
+    flex: 1,
+  },
+  {
+    field: "vehicle_cc",
+    headerName: "Vehicle CC",
     flex: 1,
   },
 ];

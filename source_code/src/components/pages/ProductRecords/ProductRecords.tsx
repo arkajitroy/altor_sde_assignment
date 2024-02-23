@@ -1,13 +1,13 @@
-import { Box, Button, useTheme } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
-import Header from "../../layouts/Header/Header";
+import { Box, useTheme } from "@mui/material";
 import { DataGrid, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid";
+import { v4 as uuidv4 } from "uuid";
+
+import Header from "../../layouts/Header/Header";
 import { TProductDataGrid } from "../../../@types/TGrid.types";
 import { productsDataGridAttributes } from "../../../constants/productsDataGrid";
 import { fetchData } from "../../../configs/api.config";
 import FlexBetween from "../../../globalStyles/FlexBetween";
-import { DownloadOutlined } from "@mui/icons-material";
-import { v4 as uuidv4 } from "uuid";
 
 const CustomExportToolbar = () => {
   return (

@@ -1,3 +1,8 @@
-import { TResponseData } from "./TAPI.types";
-
-export type TProductDataGrid = TResponseData;
+export type TProductDataGrid = {
+  username: string;
+  zone: string;
+  device_brand: string;
+  sdk_int: number;
+  vehicle_brand: string;
+  vehicle_cc: string;
+};
