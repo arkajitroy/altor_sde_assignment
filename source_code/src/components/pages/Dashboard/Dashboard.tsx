@@ -23,12 +23,18 @@ const Dashboard: React.FC = (): JSX.Element => {
   // ================================== (DATA RENDER STATE) =====================================
   const [deviceBrandRenderData, setDeviceBrandRenderData] = useState<TPieChartDistribution[]>([]);
   const [vehicleBrandRenderData, setVehicleBrandRenderData] = useState<TPieChartDistribution[]>([]);
+  const [vehicleCCRenderData, setVehicleCCRenderData] = useState<TPieChartDistribution[]>([]);
   // ================================== (DATA FILTER STATE) =====================================
   const [deviceBrandDST, setDeviceBrandDST] = useState<TBrandDistributionPieState>({
     filter: "Zone_1",
     dataSet: [],
   });
   const [vehicleBrandDST, setVehicleBrandDST] = useState<TBrandDistributionPieState>({
+    filter: "Zone_1",
+    dataSet: [],
+  });
+
+  const [vehicleCCDST, setVehicleCCDST] = useState<TBrandDistributionPieState>({
     filter: "Zone_1",
     dataSet: [],
   });
@@ -63,9 +69,11 @@ const Dashboard: React.FC = (): JSX.Element => {
         ? setDeviceBrandDST(Object.assign({}, deviceBrandDST, { filter: value }))
         : pieFilter === "vehicle_brand"
         ? setVehicleBrandDST(Object.assign({}, vehicleBrandDST, { filter: value }))
+        : pieFilter === "vehicle_cc"
+        ? setVehicleCCDST(Object.assign({}, vehicleCCDST, { filter: value }))
         : null;
     },
-    [deviceBrandDST, vehicleBrandDST]
+    [deviceBrandDST, vehicleBrandDST, vehicleCCDST]
   );
   // ======================================= (Handle Change { Filtered } Data to Charts) ======================
 
@@ -82,6 +90,10 @@ const Dashboard: React.FC = (): JSX.Element => {
       if (pieFilter === "vehicle_brand") {
         const _filteredData = services.filteration.getCategoryCountByZone(dataSet, zone);
         setVehicleBrandRenderData(_filteredData);
+      }
+      if (pieFilter === "vehicle_cc") {
+        const _filteredData = services.filteration.getCategoryCountByZone(dataSet, zone);
+        setVehicleCCRenderData(_filteredData);
       }
     },
     []
@@ -103,11 +115,16 @@ const Dashboard: React.FC = (): JSX.Element => {
         setVehicleBrandDST(Object.assign([], vehicleBrandDST, { dataSet: _parsedData }));
         handleSetFilteredDataToPieChart(pieFilter, _parsedData, "Zone_1");
       }
+      if (pieFilter === "vehicle_cc") {
+        const _parsedData = productRecordsData.map(({ vehicle_cc, zone }) => {
+          return { category: vehicle_cc, zone };
+        });
+        setVehicleCCDST(Object.assign([], vehicleCCDST, { dataSet: _parsedData }));
+        handleSetFilteredDataToPieChart(pieFilter, _parsedData, "Zone_1");
+      }
     },
-    [productRecordsData, deviceBrandDST, vehicleBrandDST, handleSetFilteredDataToPieChart]
+    [productRecordsData, deviceBrandDST, vehicleBrandDST, vehicleCCDST, handleSetFilteredDataToPieChart]
   );
-
-  console.log("deviceBrandDST", deviceBrandDST);
 
   // Fetching Data from API & LocalStorage
   useEffect(() => {
@@ -118,15 +135,21 @@ const Dashboard: React.FC = (): JSX.Element => {
   useEffect(() => {
     if (deviceBrandDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("device_brand");
     if (vehicleBrandDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("vehicle_brand");
-  }, [deviceBrandDST.dataSet, vehicleBrandDST.dataSet, productRecordsData, handleSetInitialDatastoPieChart]);
+    if (vehicleCCDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("vehicle_cc");
+  }, [
+    deviceBrandDST.dataSet,
+    vehicleBrandDST.dataSet,
+    vehicleCCDST.dataSet,
+    productRecordsData,
+    handleSetInitialDatastoPieChart,
+  ]);
 
   // Setting Filtered Datas into the Pie Chart
   useEffect(() => {
     if (deviceBrandDST.filter) handleSetFilteredDataToPieChart("device_brand", deviceBrandDST.dataSet, deviceBrandDST.filter);
     if (vehicleBrandDST.filter) handleSetFilteredDataToPieChart("vehicle_brand", vehicleBrandDST.dataSet, vehicleBrandDST.filter);
-  }, [deviceBrandDST.filter, vehicleBrandDST.filter, handleSetFilteredDataToPieChart]);
-
-  console.log("API-RESPONSE ===============> ", productRecordsData);
+    if (vehicleCCDST.filter) handleSetFilteredDataToPieChart("vehicle_cc", vehicleCCDST.dataSet, vehicleCCDST.filter);
+  }, [deviceBrandDST.filter, vehicleBrandDST.filter, vehicleCCDST.filter, handleSetFilteredDataToPieChart]);
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -270,7 +293,7 @@ const Dashboard: React.FC = (): JSX.Element => {
               </Select>
             </FormControl>
           </FlexBetween>
-          <PieChart pieData={deviceBrandRenderData} />
+          <PieChart pieData={vehicleCCRenderData} />
         </Box>
 
         {/* ====================== STACKED-BAR-CHART ========================*/}
