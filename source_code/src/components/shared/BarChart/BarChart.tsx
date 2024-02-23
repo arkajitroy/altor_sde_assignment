@@ -37,10 +37,11 @@ const BarChart: React.FC = (): JSX.Element => {
       data={data}
       keys={["degress"]}
       indexBy="day"
-      margin={{ top: 40, right: 50, bottom: 50, left: 50 }}
+      margin={{ top: 40, right: 50, bottom: 120, left: 50 }}
       padding={0.6}
       valueScale={{ type: "linear" }}
       colors="#3182CE"
+      labelTextColor="white"
       animate={true}
       enableLabel={false}
       axisTop={null}
@@ -52,6 +53,9 @@ const BarChart: React.FC = (): JSX.Element => {
         legend: "degrees",
         legendPosition: "middle",
         legendOffset: -40,
+      }}
+      axisBottom={{
+        tickRotation: -58,
       }}
       legends={[
         {

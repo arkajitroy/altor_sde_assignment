@@ -89,8 +89,8 @@ const PieChart: React.FC = (): JSX.Element => {
   return (
     <ResponsivePie
       data={pieData}
-      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-      padAngle={0.7}
+      margin={{ top: 30, right: 60, bottom: 110, left: 40 }}
+      padAngle={0.1}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
       borderWidth={1}
@@ -136,7 +136,7 @@ const PieChart: React.FC = (): JSX.Element => {
           translateX: 0,
           translateY: 56,
           itemsSpacing: 0,
-          itemWidth: 100,
+          itemWidth: 60,
           itemHeight: 18,
           itemTextColor: "#999",
           itemDirection: "left-to-right",

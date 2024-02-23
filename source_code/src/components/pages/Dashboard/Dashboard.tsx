@@ -1,6 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { API_ROUTE } from "../../../configs/api.config";
@@ -10,11 +19,17 @@ import { BarChart, PieChart, StackedBarChart } from "../..";
 import { productsDataGridAttributes } from "../../../constants/productsDataGrid";
 import { TProductDataGrid } from "../../../@types/TGrid.types";
 import useWebStorage from "../../../hooks/useWebStorage";
+import useFetch from "../../../hooks/useFetch";
+import { TBrandDistributionPieState } from "../../../@types/TDashboard.types";
+import { zoneLists } from "../../../constants/dataProperties";
 
 import "./dashboard.scss";
-import useFetch from "../../../hooks/useFetch";
 
 const Dashboard: React.FC = (): JSX.Element => {
+  const [zoneDistribution, setZoneDistribution] = useState<TBrandDistributionPieState>({
+    filter: "",
+    dataSet: [],
+  });
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
   const [storedData, setStoredData] = useWebStorage({
     key: "apiData",
@@ -25,36 +40,20 @@ const Dashboard: React.FC = (): JSX.Element => {
 
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const theme = useTheme();
-  const columns: GridColDef[] = [
-    {
-      field: "_id",
-      headerName: "ID",
-      flex: 1,
+
+  // ======================================= (Handle Change for Filters) ====================================
+
+  const handlZonalBrandDistributionFilterChange = useCallback(
+    (event: SelectChangeEvent) => {
+      const { value } = event.target;
+      setZoneDistribution(Object.assign({}, zoneDistribution, { filter: value }));
     },
-    {
-      field: "userId",
-      headerName: "User ID",
-      flex: 1,
-    },
-    {
-      field: "createdAt",
-      headerName: "CreatedAt",
-      flex: 1,
-    },
-    {
-      field: "products",
-      headerName: "# of Products",
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params) => (params.value as any[]).length,
-    },
-    {
-      field: "cost",
-      headerName: "Cost",
-      flex: 1,
-      renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
-    },
-  ];
+    [zoneDistribution]
+  );
+
+  console.log("zoneDistribution", zoneDistribution);
+
+  // ======================================================================
 
   const getProductsRecordsData = useCallback(async () => {
     try {
@@ -95,33 +94,91 @@ const Dashboard: React.FC = (): JSX.Element => {
         {/* ====================== PIE-CHART ========================*/}
         <Box
           gridColumn="span 4"
-          gridRow="span 2"
+          gridRow="span 3"
           backgroundColor={theme.palette.background.alt}
           p="1rem"
           borderRadius="1rem"
           component={""}
         >
+          <FlexBetween>
+            <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
+              Device Brand
+            </Typography>
+            <FormControl sx={{ width: "40%" }}>
+              <InputLabel id="demo-simple-select-label">Zone</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={zoneDistribution.filter}
+                label="zonalDistribution"
+                onChange={handlZonalBrandDistributionFilterChange}
+              >
+                {zoneLists.map(({ label, value }, index) => {
+                  return <MenuItem value={value}>{label}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+          </FlexBetween>
           <PieChart />
         </Box>
         {/* ====================== BAR-CHART ========================*/}
         <Box
           gridColumn="span 4"
-          gridRow="span 2"
+          gridRow="span 3"
           backgroundColor={theme.palette.background.alt}
           borderRadius="1rem"
+          p="1rem"
           component={""}
         >
+          <FlexBetween>
+            <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
+              Device Brand
+            </Typography>
+            <FormControl sx={{ width: "40%" }}>
+              <InputLabel id="demo-simple-select-label">Zone</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={zoneDistribution.filter}
+                label="zonalDistribution"
+                onChange={handlZonalBrandDistributionFilterChange}
+              >
+                {zoneLists.map(({ label, value }, index) => {
+                  return <MenuItem value={value}>{label}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+          </FlexBetween>
           <BarChart />
         </Box>
         {/* ====================== PIE-CHART ========================*/}
         <Box
           gridColumn="span 4"
-          gridRow="span 2"
+          gridRow="span 3"
           backgroundColor={theme.palette.background.alt}
           p="1rem"
           borderRadius="1rem"
           component={""}
         >
+          <FlexBetween>
+            <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
+              Device Brand
+            </Typography>
+            <FormControl sx={{ width: "40%" }}>
+              <InputLabel id="demo-simple-select-label">Zone</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={zoneDistribution.filter}
+                label="zonalDistribution"
+                onChange={handlZonalBrandDistributionFilterChange}
+              >
+                {zoneLists.map(({ label, value }, index) => {
+                  return <MenuItem value={value}>{label}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+          </FlexBetween>
           <PieChart />
         </Box>
 
@@ -131,10 +188,29 @@ const Dashboard: React.FC = (): JSX.Element => {
           gridColumn="span 6"
           gridRow="span 2"
           backgroundColor={theme.palette.background.alt}
-          p="1rem"
+          p="1rem 2rem"
           borderRadius="1rem"
           component={""}
         >
+          <FlexBetween>
+            <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
+              Vehicle CC
+            </Typography>
+            <FormControl sx={{ width: "40%" }}>
+              <InputLabel id="demo-simple-select-label">Zone</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={zoneDistribution.filter}
+                label="zonalDistribution"
+                onChange={handlZonalBrandDistributionFilterChange}
+              >
+                {zoneLists.map(({ label, value }, index) => {
+                  return <MenuItem value={value}>{label}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+          </FlexBetween>
           <PieChart />
         </Box>
 

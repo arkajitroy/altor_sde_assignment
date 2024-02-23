@@ -5,7 +5,7 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { themeSettings } from "./globalStyles/theme";
 
 const App: React.FC = () => {
-  const theme = useMemo(() => createTheme(themeSettings("dark")), ["dark"]);
+  const theme = useMemo(() => createTheme(themeSettings("light")), ["light"]);
 
   return (
     <div className="app">
