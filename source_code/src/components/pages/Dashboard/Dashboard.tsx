@@ -11,7 +11,7 @@ import { productsDataGridAttributes } from "../../../constants/productsDataGrid"
 import { TProductDataGrid } from "../../../@types/TGrid.types";
 import useWebStorage from "../../../hooks/useWebStorage";
 import useFetch from "../../../hooks/useFetch";
-import { TBrandDistributionPieState } from "../../../@types/TDashboard.types";
+import { TPieChartTempState } from "../../../@types/TDashboard.types";
 import { zoneLists } from "../../../constants/dataProperties";
 import { services } from "../../../services";
 import { TPieChartDistribution, TZoneFilter } from "../../../@types/TCharts.type";
@@ -25,16 +25,16 @@ const Dashboard: React.FC = (): JSX.Element => {
   const [vehicleBrandRenderData, setVehicleBrandRenderData] = useState<TPieChartDistribution[]>([]);
   const [vehicleCCRenderData, setVehicleCCRenderData] = useState<TPieChartDistribution[]>([]);
   // ================================== (DATA FILTER STATE) =====================================
-  const [deviceBrandDST, setDeviceBrandDST] = useState<TBrandDistributionPieState>({
+  const [deviceBrandDST, setDeviceBrandDST] = useState<TPieChartTempState>({
     filter: "Zone_1",
     dataSet: [],
   });
-  const [vehicleBrandDST, setVehicleBrandDST] = useState<TBrandDistributionPieState>({
+  const [vehicleBrandDST, setVehicleBrandDST] = useState<TPieChartTempState>({
     filter: "Zone_1",
     dataSet: [],
   });
 
-  const [vehicleCCDST, setVehicleCCDST] = useState<TBrandDistributionPieState>({
+  const [vehicleCCDST, setVehicleCCDST] = useState<TPieChartTempState>({
     filter: "Zone_1",
     dataSet: [],
   });

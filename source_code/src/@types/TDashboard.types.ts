@@ -1,6 +1,6 @@
 import { TZoneFilter } from "./TCharts.type";
 
-export type TBrandDistributionPieState = {
+export type TPieChartTempState = {
   filter: TZoneFilter;
   dataSet: any[];
 };
