@@ -1,12 +1,12 @@
 import { services } from "..";
 import { TPieChartDistribution } from "../../@types/TCharts.type";
 
-type TGetDeviceBrandCountByZone = {
+type TGetCategoryCountByZone = {
   category: string;
   zone: string;
 };
 
-export const getDeviceBrandCountByZone = (data: TGetDeviceBrandCountByZone[], zone: string): TPieChartDistribution[] => {
+export const getCategoryCountByZone = (data: TGetCategoryCountByZone[], zone: string): TPieChartDistribution[] => {
   const filteredData = data.filter((item) => item.zone === zone);
   const brandCounts: { [key: string]: number } = {};
 
