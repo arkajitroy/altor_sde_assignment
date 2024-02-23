@@ -3,7 +3,7 @@ import { useTheme } from "@emotion/react";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
-import { fetchData } from "../../../configs/api.config";
+import { API_ROUTE } from "../../../configs/api.config";
 import FlexBetween from "../../../globalStyles/FlexBetween";
 import Header from "../../layouts/Header/Header";
 import { BarChart, PieChart, StackedBarChart } from "../..";
@@ -12,6 +12,7 @@ import { TProductDataGrid } from "../../../@types/TGrid.types";
 import useWebStorage from "../../../hooks/useWebStorage";
 
 import "./dashboard.scss";
+import useFetch from "../../../hooks/useFetch";
 
 const Dashboard: React.FC = (): JSX.Element => {
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
@@ -20,6 +21,7 @@ const Dashboard: React.FC = (): JSX.Element => {
     initialValue: [],
     storageType: "sessionStorage",
   });
+  const { result, error } = useFetch({ url: API_ROUTE });
 
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const theme = useTheme();
@@ -56,10 +58,10 @@ const Dashboard: React.FC = (): JSX.Element => {
 
   const getProductsRecordsData = useCallback(async () => {
     try {
-      const getData = await fetchData();
-      if (getData && getData.length > 0) {
-        setProductRecordsData(getData);
-        setStoredData(getData);
+      if (!error && result) {
+        const { data } = result;
+        setProductRecordsData(data);
+        setStoredData(data);
       }
     } catch (error) {
       console.log("Something went wrong while fetching!");
@@ -70,7 +72,7 @@ const Dashboard: React.FC = (): JSX.Element => {
     storedData && storedData.length > 0
       ? setProductRecordsData(storedData)
       : getProductsRecordsData();
-  }, [getProductsRecordsData]);
+  }, [getProductsRecordsData, storedData, setProductRecordsData]);
 
   return (
     <Box m="1.5rem 2.5rem">
