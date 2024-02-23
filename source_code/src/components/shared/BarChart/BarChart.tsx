@@ -1,42 +1,11 @@
-import React from "react";
 import { ResponsiveBar } from "@nivo/bar";
 
-const BarChart: React.FC = (): JSX.Element => {
-  const data = [
-    {
-      day: "Monday",
-      degress: 59,
-    },
-    {
-      day: "Tuesday",
-      degress: 61,
-    },
-    {
-      day: "Wednesday",
-      degress: 55,
-    },
-    {
-      day: "Thursday",
-      degress: 78,
-    },
-    {
-      day: "Friday",
-      degress: 71,
-    },
-    {
-      day: "Saturday",
-      degress: 56,
-    },
-    {
-      day: "Sunday",
-      degress: 67,
-    },
-  ];
+const BarChart = ({ data }: any) => {
   return (
     <ResponsiveBar
       data={data}
-      keys={["degress"]}
-      indexBy="day"
+      keys={["value"]}
+      indexBy="category"
       margin={{ top: 40, right: 20, bottom: 120, left: 50 }}
       padding={0.3}
       valueScale={{ type: "linear" }}

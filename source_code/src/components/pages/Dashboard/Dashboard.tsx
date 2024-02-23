@@ -11,10 +11,10 @@ import { productsDataGridAttributes } from "../../../constants/productsDataGrid"
 import { TProductDataGrid } from "../../../@types/TGrid.types";
 import useWebStorage from "../../../hooks/useWebStorage";
 import useFetch from "../../../hooks/useFetch";
-import { TPieChartTempState } from "../../../@types/TDashboard.types";
+import { TBarChartTempState, TPieChartTempState } from "../../../@types/TDashboard.types";
 import { zoneLists } from "../../../constants/dataProperties";
 import { services } from "../../../services";
-import { TPieChartDistribution, TZoneFilter } from "../../../@types/TCharts.type";
+import { TBarChartDistribution, TPieChartDistribution, TZoneFilter } from "../../../@types/TCharts.type";
 
 import "./dashboard.scss";
 
@@ -24,6 +24,7 @@ const Dashboard: React.FC = (): JSX.Element => {
   const [deviceBrandRenderData, setDeviceBrandRenderData] = useState<TPieChartDistribution[]>([]);
   const [vehicleBrandRenderData, setVehicleBrandRenderData] = useState<TPieChartDistribution[]>([]);
   const [vehicleCCRenderData, setVehicleCCRenderData] = useState<TPieChartDistribution[]>([]);
+  const [vehicleCountRenderData, setVehicleCountRenderData] = useState<TBarChartDistribution[]>([]);
   // ================================== (DATA FILTER STATE) =====================================
   const [deviceBrandDST, setDeviceBrandDST] = useState<TPieChartTempState>({
     filter: "Zone_1",
@@ -33,8 +34,11 @@ const Dashboard: React.FC = (): JSX.Element => {
     filter: "Zone_1",
     dataSet: [],
   });
-
   const [vehicleCCDST, setVehicleCCDST] = useState<TPieChartTempState>({
+    filter: "Zone_1",
+    dataSet: [],
+  });
+  const [vehicleCountBarDST, setVehicleCountBarDST] = useState<TBarChartTempState>({
     filter: "Zone_1",
     dataSet: [],
   });
@@ -63,17 +67,25 @@ const Dashboard: React.FC = (): JSX.Element => {
 
   // ======================================= (Handle Change for Filters) ====================================
   const handleFilterChange = useCallback(
-    (event: SelectChangeEvent, pieFilter: "device_brand" | "vehicle_brand" | "vehicle_cc") => {
+    (event: SelectChangeEvent, filter: "device_brand" | "vehicle_brand" | "vehicle_cc") => {
       const { value } = event.target;
-      pieFilter === "device_brand"
+      filter === "device_brand"
         ? setDeviceBrandDST(Object.assign({}, deviceBrandDST, { filter: value }))
-        : pieFilter === "vehicle_brand"
+        : filter === "vehicle_brand"
         ? setVehicleBrandDST(Object.assign({}, vehicleBrandDST, { filter: value }))
-        : pieFilter === "vehicle_cc"
+        : filter === "vehicle_cc"
         ? setVehicleCCDST(Object.assign({}, vehicleCCDST, { filter: value }))
         : null;
     },
     [deviceBrandDST, vehicleBrandDST, vehicleCCDST]
+  );
+
+  const handleBarChartFilterChange = useCallback(
+    (event: SelectChangeEvent, filter: "vehicle_brand") => {
+      const { value } = event.target;
+      filter === "vehicle_brand" ? setVehicleCountBarDST(Object.assign({}, vehicleBrandDST, { filter: value })) : null;
+    },
+    [vehicleBrandDST]
   );
   // ======================================= (Handle Change { Filtered } Data to Charts) ======================
 
@@ -98,6 +110,16 @@ const Dashboard: React.FC = (): JSX.Element => {
     },
     []
   );
+  const handleSetFilteredDataToBarChart = useCallback(
+    (barChartFilter: "vehicle_brand", dataSet: { category: string; zone: string }[], zone: TZoneFilter) => {
+      if (barChartFilter === "vehicle_brand") {
+        const _filteredData = services.filteration.getCategoryCountBarChart(dataSet, zone);
+        setVehicleCountRenderData(_filteredData);
+      }
+    },
+    []
+  );
+
   // ======================================= (Handle Change { Initial } Data to Charts) ======================
   const handleSetInitialDatastoPieChart = useCallback(
     (pieFilter: "device_brand" | "vehicle_brand" | "vehicle_cc") => {
@@ -125,6 +147,19 @@ const Dashboard: React.FC = (): JSX.Element => {
     },
     [productRecordsData, deviceBrandDST, vehicleBrandDST, vehicleCCDST, handleSetFilteredDataToPieChart]
   );
+  const handleSetInitialDatasToBarChart = useCallback(
+    (barChartFilter: "vehicle_brand") => {
+      if (barChartFilter === "vehicle_brand") {
+        const _parsedData = productRecordsData.map(({ vehicle_brand, zone }) => {
+          return { category: vehicle_brand, zone };
+        });
+
+        setVehicleCountBarDST(Object.assign([], vehicleBrandDST, { dataSet: _parsedData }));
+        handleSetFilteredDataToBarChart(barChartFilter, _parsedData, "Zone_1");
+      }
+    },
+    [vehicleBrandDST, productRecordsData]
+  );
 
   // Fetching Data from API & LocalStorage
   useEffect(() => {
@@ -136,12 +171,15 @@ const Dashboard: React.FC = (): JSX.Element => {
     if (deviceBrandDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("device_brand");
     if (vehicleBrandDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("vehicle_brand");
     if (vehicleCCDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("vehicle_cc");
+    if (vehicleCountBarDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatasToBarChart("vehicle_brand");
   }, [
     deviceBrandDST.dataSet,
     vehicleBrandDST.dataSet,
     vehicleCCDST.dataSet,
+    vehicleCountBarDST.dataSet,
     productRecordsData,
     handleSetInitialDatastoPieChart,
+    handleSetInitialDatasToBarChart,
   ]);
 
   // Setting Filtered Datas into the Pie Chart
@@ -149,7 +187,17 @@ const Dashboard: React.FC = (): JSX.Element => {
     if (deviceBrandDST.filter) handleSetFilteredDataToPieChart("device_brand", deviceBrandDST.dataSet, deviceBrandDST.filter);
     if (vehicleBrandDST.filter) handleSetFilteredDataToPieChart("vehicle_brand", vehicleBrandDST.dataSet, vehicleBrandDST.filter);
     if (vehicleCCDST.filter) handleSetFilteredDataToPieChart("vehicle_cc", vehicleCCDST.dataSet, vehicleCCDST.filter);
-  }, [deviceBrandDST.filter, vehicleBrandDST.filter, vehicleCCDST.filter, handleSetFilteredDataToPieChart]);
+    if (vehicleCountBarDST.filter)
+      handleSetFilteredDataToBarChart("vehicle_brand", vehicleCountBarDST.dataSet, vehicleCountBarDST.filter);
+  }, [
+    deviceBrandDST.filter,
+    vehicleBrandDST.filter,
+    vehicleCCDST.filter,
+    vehicleCountBarDST.filter,
+    handleSetFilteredDataToPieChart,
+  ]);
+
+  console.log("vehicleCountRenderData", vehicleCountRenderData);
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -221,17 +269,21 @@ const Dashboard: React.FC = (): JSX.Element => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={deviceBrandDST.filter}
+                value={vehicleCountBarDST.filter}
                 label="zonalDistribution"
-                onChange={handleFilterChange}
+                onChange={(event: SelectChangeEvent) => handleBarChartFilterChange(event, "vehicle_brand")}
               >
                 {zoneLists.map(({ label, value }, index) => {
-                  return <MenuItem value={value}>{label}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={value}>
+                      {label}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
           </FlexBetween>
-          <BarChart />
+          <BarChart data={vehicleCountRenderData} />
         </Box>
         {/* ====================== PIE-CHART ========================*/}
         <Box
@@ -256,7 +308,11 @@ const Dashboard: React.FC = (): JSX.Element => {
                 onChange={(event: SelectChangeEvent) => handleFilterChange(event, "vehicle_brand")}
               >
                 {zoneLists.map(({ label, value }, index) => {
-                  return <MenuItem value={value}>{label}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={value}>
+                      {label}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
@@ -283,9 +339,9 @@ const Dashboard: React.FC = (): JSX.Element => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={deviceBrandDST.filter}
+                value={vehicleCCDST.filter}
                 label="zonalDistribution"
-                onChange={handleFilterChange}
+                onChange={(event: SelectChangeEvent) => handleFilterChange(event, "vehicle_cc")}
               >
                 {zoneLists.map(({ label, value }, index) => {
                   return <MenuItem value={value}>{label}</MenuItem>;
@@ -337,7 +393,7 @@ const Dashboard: React.FC = (): JSX.Element => {
               </Select>
             </FormControl>
           </FlexBetween>
-          <BarChart />
+          {/* <BarChart /> */}
         </Box>
 
         {/* ================================================= ROW 3 =====================================================*/}

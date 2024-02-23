@@ -6,3 +6,8 @@ export type TPieChartDistribution = {
   value: number;
   color: string;
 };
+
+export type TBarChartDistribution = {
+  category: string;
+  value: number;
+};
