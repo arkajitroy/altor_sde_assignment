@@ -65,20 +65,8 @@ const Navbar: React.FC<TNavbarProps> = ({ showSidebar, setShowSidebar }) => {
 
         {/* RIGHT SIDE */}
         <FlexBetween gap="1.5rem">
-          <IconButton onClick={() => null}>
-            {theme.palette.mode === "dark" ? (
-              <DarkModeOutlined sx={{ fontSize: "25px" }} />
-            ) : (
-              <LightModeOutlined sx={{ fontSize: "25px" }} />
-            )}
-          </IconButton>
-          <IconButton>
-            <SettingsOutlined sx={{ fontSize: "25px" }} />
-          </IconButton>
-
           <FlexBetween>
             <Button
-              onClick={handleClick}
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -108,18 +96,7 @@ const Navbar: React.FC<TNavbarProps> = ({ showSidebar, setShowSidebar }) => {
                   Company
                 </Typography>
               </Box>
-              <ArrowDropDownOutlined
-                sx={{ color: theme.palette.secondary[300], fontSize: "25px" }}
-              />
             </Button>
-            <Menu
-              anchorEl={anchorEl}
-              open={isOpen}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-              <MenuItem onClick={handleClose}>Log Out</MenuItem>
-            </Menu>
           </FlexBetween>
         </FlexBetween>
       </Toolbar>

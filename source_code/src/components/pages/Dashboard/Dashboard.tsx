@@ -10,7 +10,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 
 import { API_ROUTE } from "../../../configs/api.config";
 import FlexBetween from "../../../globalStyles/FlexBetween";
@@ -228,9 +228,40 @@ const Dashboard: React.FC = (): JSX.Element => {
           </Typography>
           <StackedBarChart />
         </Box>
-        {/* ====================== DATA-GRID ========================*/}
         <Box
           gridColumn="span 6"
+          gridRow="span 2"
+          backgroundColor={theme.palette.background.alt}
+          borderRadius="1rem"
+          p="1rem"
+          component={""}
+        >
+          <FlexBetween>
+            <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
+              Device Brand
+            </Typography>
+            <FormControl sx={{ width: "40%" }}>
+              <InputLabel id="demo-simple-select-label">Zone</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={zoneDistribution.filter}
+                label="zonalDistribution"
+                onChange={handlZonalBrandDistributionFilterChange}
+              >
+                {zoneLists.map(({ label, value }, index) => {
+                  return <MenuItem value={value}>{label}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+          </FlexBetween>
+          <BarChart />
+        </Box>
+
+        {/* ================================================= ROW 3 =====================================================*/}
+        {/* ====================== DATA-GRID ========================*/}
+        <Box
+          gridColumn="span 12"
           gridRow="span 2"
           sx={{
             "& .MuiDataGrid-root": {
