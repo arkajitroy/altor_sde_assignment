@@ -22,6 +22,7 @@ const Dashboard: React.FC = (): JSX.Element => {
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
   // ================================== (DATA RENDER STATE) =====================================
   const [deviceBrandRenderData, setDeviceBrandRenderData] = useState<TPieChartDistribution[]>([]);
+  const [vehicleBrandRenderData, setVehicleBrandRenderData] = useState<TPieChartDistribution[]>([]);
   // ================================== (DATA FILTER STATE) =====================================
   const [deviceBrandDST, setDeviceBrandDST] = useState<TBrandDistributionPieState>({
     filter: "Zone_1",
@@ -58,9 +59,13 @@ const Dashboard: React.FC = (): JSX.Element => {
   const handleFilterChange = useCallback(
     (event: SelectChangeEvent, pieFilter: "device_brand" | "vehicle_brand" | "vehicle_cc") => {
       const { value } = event.target;
-      pieFilter === "device_brand" ? setDeviceBrandDST(Object.assign({}, deviceBrandDST, { filter: value })) : null;
+      pieFilter === "device_brand"
+        ? setDeviceBrandDST(Object.assign({}, deviceBrandDST, { filter: value }))
+        : pieFilter === "vehicle_brand"
+        ? setVehicleBrandDST(Object.assign({}, vehicleBrandDST, { filter: value }))
+        : null;
     },
-    [deviceBrandDST]
+    [deviceBrandDST, vehicleBrandDST]
   );
   // ======================================= (Handle Change { Filtered } Data to Charts) ======================
 
@@ -71,8 +76,12 @@ const Dashboard: React.FC = (): JSX.Element => {
       zone: TZoneFilter
     ) => {
       if (pieFilter === "device_brand") {
-        const _filteredData = services.filteration.getDeviceBrandCountByZone(dataSet, zone);
+        const _filteredData = services.filteration.getCategoryCountByZone(dataSet, zone);
         setDeviceBrandRenderData(_filteredData);
+      }
+      if (pieFilter === "vehicle_brand") {
+        const _filteredData = services.filteration.getCategoryCountByZone(dataSet, zone);
+        setVehicleBrandRenderData(_filteredData);
       }
     },
     []
@@ -114,7 +123,10 @@ const Dashboard: React.FC = (): JSX.Element => {
   // Setting Filtered Datas into the Pie Chart
   useEffect(() => {
     if (deviceBrandDST.filter) handleSetFilteredDataToPieChart("device_brand", deviceBrandDST.dataSet, deviceBrandDST.filter);
-  }, [deviceBrandDST.filter, handleSetFilteredDataToPieChart]);
+    if (vehicleBrandDST.filter) handleSetFilteredDataToPieChart("vehicle_brand", vehicleBrandDST.dataSet, vehicleBrandDST.filter);
+  }, [deviceBrandDST.filter, vehicleBrandDST.filter, handleSetFilteredDataToPieChart]);
+
+  console.log("API-RESPONSE ===============> ", productRecordsData);
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -209,16 +221,16 @@ const Dashboard: React.FC = (): JSX.Element => {
         >
           <FlexBetween>
             <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
-              Device Brand
+              Vehicle Brand
             </Typography>
             <FormControl sx={{ width: "40%" }}>
               <InputLabel id="demo-simple-select-label">Zone</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={deviceBrandDST.filter}
+                value={vehicleBrandDST.filter}
                 label="zonalDistribution"
-                onChange={handleFilterChange}
+                onChange={(event: SelectChangeEvent) => handleFilterChange(event, "vehicle_brand")}
               >
                 {zoneLists.map(({ label, value }, index) => {
                   return <MenuItem value={value}>{label}</MenuItem>;
@@ -226,7 +238,7 @@ const Dashboard: React.FC = (): JSX.Element => {
               </Select>
             </FormControl>
           </FlexBetween>
-          <PieChart pieData={deviceBrandRenderData} />
+          <PieChart pieData={vehicleBrandRenderData} />
         </Box>
 
         {/* ================================================= ROW 2 =====================================================*/}

@@ -1,4 +1,4 @@
-import { getDeviceBrandCountByZone } from "./filteration/getDeviceBrandCountByZone";
+import { getCategoryCountByZone } from "./filteration/getCategoryCountByZone";
 import { getRandomColor } from "./utility/getRandomColor";
 
 export const services = {
@@ -6,6 +6,6 @@ export const services = {
     getRandomColor: getRandomColor,
   },
   filteration: {
-    getDeviceBrandCountByZone: getDeviceBrandCountByZone,
+    getCategoryCountByZone: getCategoryCountByZone,
   },
 };
