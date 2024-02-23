@@ -1,26 +1,26 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { fetchData } from "../../../configs/api.config";
+import { useTheme } from "@emotion/react";
+import { Box, Typography, useMediaQuery } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
-import "./dashboard.scss";
-import { Box, Button, Typography, useMediaQuery } from "@mui/material";
+import { fetchData } from "../../../configs/api.config";
 import FlexBetween from "../../../globalStyles/FlexBetween";
 import Header from "../../layouts/Header/Header";
-import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid";
-import { useTheme } from "@emotion/react";
 import { BarChart, PieChart, StackedBarChart } from "../..";
 import { productsDataGridAttributes } from "../../../constants/productsDataGrid";
 import { TProductDataGrid } from "../../../@types/TGrid.types";
+import useWebStorage from "../../../hooks/useWebStorage";
 
-const CustomExportToolbar = () => {
-  return (
-    <GridToolbarContainer>
-      <GridToolbarExport />
-    </GridToolbarContainer>
-  );
-};
+import "./dashboard.scss";
 
 const Dashboard: React.FC = (): JSX.Element => {
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
+  const [storedData, setStoredData] = useWebStorage({
+    key: "apiData",
+    initialValue: [],
+    storageType: "sessionStorage",
+  });
+
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const theme = useTheme();
   const columns: GridColDef[] = [
@@ -55,33 +55,27 @@ const Dashboard: React.FC = (): JSX.Element => {
   ];
 
   const getProductsRecordsData = useCallback(async () => {
-    const getData = await fetchData();
-    if (getData) setProductRecordsData(getData);
-  }, []);
+    try {
+      const getData = await fetchData();
+      if (getData && getData.length > 0) {
+        setProductRecordsData(getData);
+        setStoredData(getData);
+      }
+    } catch (error) {
+      console.log("Something went wrong while fetching!");
+    }
+  }, [setStoredData]);
 
   useEffect(() => {
-    getProductsRecordsData();
-  }, []);
+    storedData && storedData.length > 0
+      ? setProductRecordsData(storedData)
+      : getProductsRecordsData();
+  }, [getProductsRecordsData]);
 
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
-
-        <Box>
-          {/* <Button
-            sx={{
-              backgroundColor: theme.palette.secondary.light,
-              color: theme.palette.background.alt,
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
-          >
-            <DownloadOutlined sx={{ mr: "10px" }} />
-            Download Reports
-          </Button> */}
-        </Box>
       </FlexBetween>
 
       <Box
