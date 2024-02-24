@@ -25,6 +25,7 @@ const Dashboard: React.FC = (): JSX.Element => {
   const [vehicleBrandRenderData, setVehicleBrandRenderData] = useState<TPieChartDistribution[]>([]);
   const [vehicleCCRenderData, setVehicleCCRenderData] = useState<TPieChartDistribution[]>([]);
   const [vehicleCountRenderData, setVehicleCountRenderData] = useState<TBarChartDistribution[]>([]);
+  const [sdkCountRenderData, setSDKCountRenderData] = useState<TBarChartDistribution[]>([]);
   // ================================== (DATA FILTER STATE) =====================================
   const [deviceBrandDST, setDeviceBrandDST] = useState<TPieChartTempState>({
     filter: "Zone_1",
@@ -39,6 +40,10 @@ const Dashboard: React.FC = (): JSX.Element => {
     dataSet: [],
   });
   const [vehicleCountBarDST, setVehicleCountBarDST] = useState<TBarChartTempState>({
+    filter: "Zone_1",
+    dataSet: [],
+  });
+  const [sdkCountBarDST, setSdkCountBarDST] = useState<TBarChartTempState>({
     filter: "Zone_1",
     dataSet: [],
   });
@@ -81,11 +86,15 @@ const Dashboard: React.FC = (): JSX.Element => {
   );
 
   const handleBarChartFilterChange = useCallback(
-    (event: SelectChangeEvent, filter: "vehicle_brand") => {
+    (event: SelectChangeEvent, filter: "vehicle_brand" | "sdk_int") => {
       const { value } = event.target;
-      filter === "vehicle_brand" ? setVehicleCountBarDST(Object.assign({}, vehicleBrandDST, { filter: value })) : null;
+      filter === "vehicle_brand"
+        ? setVehicleCountBarDST(Object.assign({}, vehicleBrandDST, { filter: value }))
+        : filter === "sdk_int"
+        ? setSdkCountBarDST(Object.assign({}, sdkCountBarDST, { filter: value }))
+        : null;
     },
-    [vehicleBrandDST]
+    [vehicleBrandDST, sdkCountBarDST]
   );
   // ======================================= (Handle Change { Filtered } Data to Charts) ======================
 
@@ -111,10 +120,16 @@ const Dashboard: React.FC = (): JSX.Element => {
     []
   );
   const handleSetFilteredDataToBarChart = useCallback(
-    (barChartFilter: "vehicle_brand", dataSet: { category: string; zone: string }[], zone: TZoneFilter) => {
+    (barChartFilter: "vehicle_brand" | "sdk_int", dataSet: { category: string; zone: string }[], zone: TZoneFilter) => {
       if (barChartFilter === "vehicle_brand") {
         const _filteredData = services.filteration.getCategoryCountBarChart(dataSet, zone);
         setVehicleCountRenderData(_filteredData);
+      }
+      if (barChartFilter === "sdk_int") {
+        console.log("yuhuuuu");
+        const _filteredData = services.filteration.getCategoryCountBarChart(dataSet, zone);
+        console.log("yuhuuuu _filteredData", _filteredData);
+        setSDKCountRenderData(_filteredData);
       }
     },
     []
@@ -148,13 +163,19 @@ const Dashboard: React.FC = (): JSX.Element => {
     [productRecordsData, deviceBrandDST, vehicleBrandDST, vehicleCCDST, handleSetFilteredDataToPieChart]
   );
   const handleSetInitialDatasToBarChart = useCallback(
-    (barChartFilter: "vehicle_brand") => {
+    (barChartFilter: "vehicle_brand" | "sdk_int") => {
       if (barChartFilter === "vehicle_brand") {
         const _parsedData = productRecordsData.map(({ vehicle_brand, zone }) => {
           return { category: vehicle_brand, zone };
         });
-
         setVehicleCountBarDST(Object.assign([], vehicleBrandDST, { dataSet: _parsedData }));
+        handleSetFilteredDataToBarChart(barChartFilter, _parsedData, "Zone_1");
+      }
+      if (barChartFilter === "sdk_int") {
+        const _parsedData = productRecordsData.map(({ sdk_int, zone }) => {
+          return { category: String(sdk_int), zone };
+        });
+        setSdkCountBarDST(Object.assign([], sdkCountBarDST, { dataSet: _parsedData }));
         handleSetFilteredDataToBarChart(barChartFilter, _parsedData, "Zone_1");
       }
     },
@@ -172,11 +193,13 @@ const Dashboard: React.FC = (): JSX.Element => {
     if (vehicleBrandDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("vehicle_brand");
     if (vehicleCCDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("vehicle_cc");
     if (vehicleCountBarDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatasToBarChart("vehicle_brand");
+    if (sdkCountBarDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatasToBarChart("sdk_int");
   }, [
     deviceBrandDST.dataSet,
     vehicleBrandDST.dataSet,
     vehicleCCDST.dataSet,
     vehicleCountBarDST.dataSet,
+    sdkCountBarDST.dataSet,
     productRecordsData,
     handleSetInitialDatastoPieChart,
     handleSetInitialDatasToBarChart,
@@ -189,15 +212,18 @@ const Dashboard: React.FC = (): JSX.Element => {
     if (vehicleCCDST.filter) handleSetFilteredDataToPieChart("vehicle_cc", vehicleCCDST.dataSet, vehicleCCDST.filter);
     if (vehicleCountBarDST.filter)
       handleSetFilteredDataToBarChart("vehicle_brand", vehicleCountBarDST.dataSet, vehicleCountBarDST.filter);
+    if (sdkCountBarDST.filter) handleSetFilteredDataToBarChart("sdk_int", sdkCountBarDST.dataSet, sdkCountBarDST.filter);
   }, [
     deviceBrandDST.filter,
     vehicleBrandDST.filter,
     vehicleCCDST.filter,
     vehicleCountBarDST.filter,
+    sdkCountBarDST.filter,
     handleSetFilteredDataToPieChart,
+    handleSetFilteredDataToBarChart,
   ]);
 
-  console.log("vehicleCountRenderData", vehicleCountRenderData);
+  console.log("sdkCountBarDST =======> ", sdkCountRenderData);
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -383,9 +409,9 @@ const Dashboard: React.FC = (): JSX.Element => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={deviceBrandDST.filter}
+                value={sdkCountBarDST.filter}
                 label="zonalDistribution"
-                onChange={handleFilterChange}
+                onChange={(event: SelectChangeEvent) => handleBarChartFilterChange(event, "sdk_int")}
               >
                 {zoneLists.map(({ label, value }, index) => {
                   return <MenuItem value={value}>{label}</MenuItem>;
@@ -393,7 +419,7 @@ const Dashboard: React.FC = (): JSX.Element => {
               </Select>
             </FormControl>
           </FlexBetween>
-          {/* <BarChart /> */}
+          <BarChart data={sdkCountRenderData} />
         </Box>
 
         {/* ================================================= ROW 3 =====================================================*/}
