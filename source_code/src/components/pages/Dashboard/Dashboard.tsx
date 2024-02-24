@@ -198,7 +198,7 @@ const Dashboard: React.FC = (): JSX.Element => {
     if (vehicleCCDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("vehicle_cc");
     if (vehicleCountBarDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatasToBarChart("vehicle_brand");
     if (sdkCountBarDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatasToBarChart("sdk_int");
-    if (vehicleCCAndSDKCountRenderData.length === 0 && productRecordsData) handleSetDataStackedCart();
+    handleSetDataStackedCart();
   }, [
     deviceBrandDST.dataSet,
     vehicleBrandDST.dataSet,
@@ -206,7 +206,6 @@ const Dashboard: React.FC = (): JSX.Element => {
     vehicleCountBarDST.dataSet,
     sdkCountBarDST.dataSet,
     productRecordsData,
-    vehicleCCAndSDKCountRenderData,
     handleSetInitialDatastoPieChart,
     handleSetInitialDatasToBarChart,
     handleSetDataStackedCart,
@@ -229,8 +228,6 @@ const Dashboard: React.FC = (): JSX.Element => {
     handleSetFilteredDataToPieChart,
     handleSetFilteredDataToBarChart,
   ]);
-
-  console.log("vehicleCCAndSDKCountRenderData", vehicleCCAndSDKCountRenderData);
 
   return (
     <Box m="1.5rem 2.5rem">

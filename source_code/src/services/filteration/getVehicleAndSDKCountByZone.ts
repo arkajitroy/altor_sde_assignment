@@ -4,7 +4,7 @@ import { TProductDataGrid } from "../../@types/TGrid.types";
 import { ZONES } from "../../constants/dataProperties";
 import { getCountByZone } from "../utility/getCountByZone";
 
-export const getVehicleAndSDKCountByZone = (productData: TProductDataGrid[]) => {
+export const getVehicleAndSDKCountByZone = (productData: TProductDataGrid[]): TStackedBarChartDistribution[] => {
   const result: TStackedBarChartDistribution[] = [];
   // Creating a filteredData
   const vehicleCCFilterData = productData.map(({ vehicle_cc, zone }) => {
