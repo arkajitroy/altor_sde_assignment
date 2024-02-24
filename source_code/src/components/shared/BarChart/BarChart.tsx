@@ -26,30 +26,6 @@ const BarChart = ({ data }: any) => {
       axisBottom={{
         tickRotation: -58,
       }}
-      // legends={[
-      //   {
-      //     dataFrom: "keys",
-      //     anchor: "bottom",
-      //     direction: "column",
-      //     justify: false,
-      //     translateX: 160,
-      //     translateY: 0,
-      //     itemsSpacing: 2,
-      //     itemWidth: 100,
-      //     itemHeight: 20,
-      //     itemDirection: "left-to-right",
-      //     itemOpacity: 0.9,
-      //     symbolSize: 20,
-      //     effects: [
-      //       {
-      //         on: "hover",
-      //         style: {
-      //           itemOpacity: 1,
-      //         },
-      //       },
-      //     ],
-      //   },
-      // ]}
     />
   );
 };

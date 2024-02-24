@@ -1,11 +1,9 @@
 import { ResponsivePie } from "@nivo/pie";
-import React from "react";
 
 const PieChart = ({ pieData }: any): JSX.Element => {
   return (
     <ResponsivePie
       data={pieData}
-      // colors={pieData.map((data: any) => data.color)}
       colors={{ scheme: "yellow_orange_brown" }}
       margin={{ top: 30, right: 60, bottom: 110, left: 40 }}
       padAngle={0.1}

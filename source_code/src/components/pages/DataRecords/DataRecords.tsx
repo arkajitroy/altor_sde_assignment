@@ -91,22 +91,6 @@ const DataRecords: React.FC = (): JSX.Element => {
             </IconButton>
           </FlexBetween>
         </FlexBetween>
-
-        {/* <Box>
-          <Button
-            sx={{
-              backgroundColor: theme.palette.secondary.light,
-              color: theme.palette.background.alt,
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
-            onClick={() => null}
-          >
-            <DownloadOutlined sx={{ mr: "10px" }} />
-            Download Records
-          </Button>
-        </Box> */}
       </FlexBetween>
 
       <Box></Box>

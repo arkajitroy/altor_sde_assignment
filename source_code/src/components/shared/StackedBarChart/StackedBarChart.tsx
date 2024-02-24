@@ -1,5 +1,4 @@
 import { ResponsiveBar } from "@nivo/bar";
-import React from "react";
 
 const StackedBarChart = ({ data }: any) => {
   return (
@@ -102,7 +101,6 @@ const StackedBarChart = ({ data }: any) => {
       ]}
       role="application"
       ariaLabel="Nivo bar chart demo"
-      // barAriaLabel={(e) => e.id + ": " + e.formattedValue + " in country: " + e.indexValue}
     />
   );
 };
