@@ -9,7 +9,7 @@ const StackedBarChart: React.FC = (): JSX.Element => {
       "hot dogColor": "hsl(177, 70%, 50%)",
       burger: 136,
       burgerColor: "hsl(3, 70%, 50%)",
-      sandwich: 88,
+      sandwich: 90,
       sandwichColor: "hsl(171, 70%, 50%)",
       kebab: 152,
       kebabColor: "hsl(86, 70%, 50%)",
@@ -119,7 +119,7 @@ const StackedBarChart: React.FC = (): JSX.Element => {
       padding={0.3}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={{ scheme: "nivo" }}
+      colors={{ scheme: "purple_orange" }}
       defs={[
         {
           id: "dots",

@@ -5,7 +5,8 @@ const PieChart = ({ pieData }: any): JSX.Element => {
   return (
     <ResponsivePie
       data={pieData}
-      colors={pieData.map((data: any) => data.color)}
+      // colors={pieData.map((data: any) => data.color)}
+      colors={{ scheme: "red_yellow_blue" }}
       margin={{ top: 30, right: 60, bottom: 110, left: 40 }}
       padAngle={0.1}
       cornerRadius={3}
