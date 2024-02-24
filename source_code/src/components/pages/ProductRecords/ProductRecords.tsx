@@ -6,13 +6,13 @@ import { v4 as uuidv4 } from "uuid";
 import Header from "../../layouts/Header/Header";
 import { TProductDataGrid } from "../../../@types/TGrid.types";
 import { productsDataGridAttributes } from "../../../constants/productsDataGrid";
-import { API_ROUTE, fetchData } from "../../../configs/api.config";
+import { API_ROUTE } from "../../../configs/api.config";
 import FlexBetween from "../../../globalStyles/FlexBetween";
-import { DownloadOutlined, Search } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import useWebStorage from "../../../hooks/useWebStorage";
 import useFetch from "../../../hooks/useFetch";
 
-const CustomExportToolbar = () => {
+const CustomMenuToolbar = () => {
   return (
     <GridToolbarContainer>
       <GridToolbarExport />
@@ -139,14 +139,14 @@ const ProductRecords: React.FC = (): JSX.Element => {
         }}
       >
         <DataGrid<TProductDataGrid>
-          // loading={isLoading || !data}
           getRowId={(row) => row.username + uniqueId}
           rows={filtereRecordsData || []}
+          disableColumnMenu
           columns={productsDataGridAttributes}
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           slots={{
-            toolbar: CustomExportToolbar,
+            toolbar: CustomMenuToolbar,
           }}
         />
       </Box>

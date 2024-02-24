@@ -61,8 +61,8 @@ export const productsDataGridAttributes: GridColDef<TProductDataGrid>[] = [
     flex: 1,
   },
   {
-    field: "vehicle_brand",
-    headerName: "Vehicle Brand",
+    field: "device_brand",
+    headerName: "Device Brand",
     flex: 1,
   },
   {
