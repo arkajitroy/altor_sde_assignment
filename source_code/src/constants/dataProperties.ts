@@ -17,4 +17,4 @@ export const zoneLists: { label: string; value: string }[] = [
   },
 ];
 
-// "Zone_1", "Zone_2", "Zone_3", "Zone_4"
+export const ZONES = ["Zone_1", "Zone_2", "Zone_3", "Zone_4"];

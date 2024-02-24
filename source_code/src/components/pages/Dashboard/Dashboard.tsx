@@ -26,6 +26,7 @@ const Dashboard: React.FC = (): JSX.Element => {
   const [vehicleCCRenderData, setVehicleCCRenderData] = useState<TPieChartDistribution[]>([]);
   const [vehicleCountRenderData, setVehicleCountRenderData] = useState<TBarChartDistribution[]>([]);
   const [sdkCountRenderData, setSDKCountRenderData] = useState<TBarChartDistribution[]>([]);
+  const [vehicleCCAndSDKCountRenderData, setVehicleCCAndSDKCountRenderData] = useState<any[]>([]);
   // ================================== (DATA FILTER STATE) =====================================
   const [deviceBrandDST, setDeviceBrandDST] = useState<TPieChartTempState>({
     filter: "Zone_1",
@@ -84,7 +85,6 @@ const Dashboard: React.FC = (): JSX.Element => {
     },
     [deviceBrandDST, vehicleBrandDST, vehicleCCDST]
   );
-
   const handleBarChartFilterChange = useCallback(
     (event: SelectChangeEvent, filter: "vehicle_brand" | "sdk_int") => {
       const { value } = event.target;
@@ -180,6 +180,12 @@ const Dashboard: React.FC = (): JSX.Element => {
     [vehicleBrandDST, productRecordsData]
   );
 
+  //========================================= (Stacked Chart Data) =======================================
+  const handleSetDataStackedCart = useCallback(() => {
+    const parsedData = services.filteration.getVehicleAndSDKCountByZone(productRecordsData);
+    setVehicleCCAndSDKCountRenderData(parsedData);
+  }, [productRecordsData, services]);
+
   // Fetching Data from API & LocalStorage
   useEffect(() => {
     storedData && storedData.length > 0 ? setProductRecordsData(storedData) : getProductsRecordsData();
@@ -192,6 +198,7 @@ const Dashboard: React.FC = (): JSX.Element => {
     if (vehicleCCDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatastoPieChart("vehicle_cc");
     if (vehicleCountBarDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatasToBarChart("vehicle_brand");
     if (sdkCountBarDST.dataSet.length === 0 && productRecordsData) handleSetInitialDatasToBarChart("sdk_int");
+    if (vehicleCCAndSDKCountRenderData.length === 0 && productRecordsData) handleSetDataStackedCart();
   }, [
     deviceBrandDST.dataSet,
     vehicleBrandDST.dataSet,
@@ -199,8 +206,10 @@ const Dashboard: React.FC = (): JSX.Element => {
     vehicleCountBarDST.dataSet,
     sdkCountBarDST.dataSet,
     productRecordsData,
+    vehicleCCAndSDKCountRenderData,
     handleSetInitialDatastoPieChart,
     handleSetInitialDatasToBarChart,
+    handleSetDataStackedCart,
   ]);
 
   // Setting Filtered Datas into the Pie Chart
@@ -221,6 +230,8 @@ const Dashboard: React.FC = (): JSX.Element => {
     handleSetFilteredDataToBarChart,
   ]);
 
+  console.log("vehicleCCAndSDKCountRenderData", vehicleCCAndSDKCountRenderData);
+
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
@@ -237,7 +248,7 @@ const Dashboard: React.FC = (): JSX.Element => {
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
       >
-        {/* ================================================= ROW 1 ( 2 PIE AND 1 BAR GRAPH)=====================================================*/}
+        {/* ====================== ROW 1 ( 2 PIE AND 1 BAR GRAPH) ===*/}
 
         {/* ====================== PIE-CHART ========================*/}
         <Box
@@ -386,8 +397,10 @@ const Dashboard: React.FC = (): JSX.Element => {
           <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
             Sales By Category
           </Typography>
-          <StackedBarChart />
+          <StackedBarChart data={vehicleCCAndSDKCountRenderData} />
         </Box>
+
+        {/* =================================== BAR CHART ========================================= */}
         <Box
           gridColumn="span 6"
           gridRow="span 2"
@@ -454,6 +467,7 @@ const Dashboard: React.FC = (): JSX.Element => {
             getRowId={(row) => row.username}
             rows={productRecordsData || []}
             columns={productsDataGridAttributes}
+            hideFooter="true"
           />
         </Box>
       </Box>

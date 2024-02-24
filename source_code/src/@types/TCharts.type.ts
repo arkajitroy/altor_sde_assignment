@@ -11,3 +11,10 @@ export type TBarChartDistribution = {
   category: string;
   value: number;
 };
+
+export type TStackedBarChartDistribution = {
+  id: number;
+  zone_name: string;
+  vehicle_cc: number;
+  sdk_int: number;
+};
