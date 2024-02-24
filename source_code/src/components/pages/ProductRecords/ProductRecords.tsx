@@ -1,13 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Box, useTheme } from "@mui/material";
+import React, { SetStateAction, useCallback, useEffect, useState } from "react";
+import { Box, Button, IconButton, InputBase, useTheme } from "@mui/material";
 import { DataGrid, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid";
 import { v4 as uuidv4 } from "uuid";
 
 import Header from "../../layouts/Header/Header";
 import { TProductDataGrid } from "../../../@types/TGrid.types";
 import { productsDataGridAttributes } from "../../../constants/productsDataGrid";
-import { fetchData } from "../../../configs/api.config";
+import { API_ROUTE, fetchData } from "../../../configs/api.config";
 import FlexBetween from "../../../globalStyles/FlexBetween";
+import { DownloadOutlined, Search } from "@mui/icons-material";
+import useWebStorage from "../../../hooks/useWebStorage";
+import useFetch from "../../../hooks/useFetch";
 
 const CustomExportToolbar = () => {
   return (
@@ -19,25 +22,80 @@ const CustomExportToolbar = () => {
 
 const ProductRecords: React.FC = (): JSX.Element => {
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
+  const [filtereRecordsData, setFilteredRecordsData] = useState<TProductDataGrid[]>([]);
+  const [searchFilterQuery, setSearchFilterQuery] = useState<string>("");
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 25,
+    page: 0,
+  });
+  const [storedData, setStoredData] = useWebStorage({
+    key: "apiData",
+    initialValue: [],
+    storageType: "sessionStorage",
+  });
   const theme = useTheme();
   const uniqueId = uuidv4();
+  const { result, error } = useFetch({ url: API_ROUTE });
 
-  const getProductsRecordsData = useCallback(async () => {
-    const getData = await fetchData();
-    if (getData) setProductRecordsData(getData);
+  const handleSearchFilterChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSearchFilterQuery((prevFilter: SetStateAction<string>) => value);
   }, []);
 
+  const handleFilterDataGridChange = useCallback(() => {
+    const filteredData = productRecordsData.filter(({ username }) => {
+      const _filterdUsername = username.toLowerCase().includes(searchFilterQuery.toLowerCase());
+      return _filterdUsername;
+    });
+    setFilteredRecordsData(filteredData);
+  }, [searchFilterQuery, productRecordsData]);
+
+  const getProductsRecordsData = useCallback(async () => {
+    try {
+      if (!error && result) {
+        const { data } = result;
+        setProductRecordsData(data);
+        setFilteredRecordsData(data);
+        setStoredData(data);
+      }
+    } catch (error) {
+      console.error("Something went wrong while fetching!");
+    }
+  }, [setStoredData]);
+
+  // For filteration of data
   useEffect(() => {
-    getProductsRecordsData();
-  }, [getProductsRecordsData]);
+    searchFilterQuery.length === 0 ? setFilteredRecordsData(storedData) : handleFilterDataGridChange();
+  }, [searchFilterQuery.length, storedData, handleFilterDataGridChange]);
+
+  // For fetching the initial data for the data grid
+  useEffect(() => {
+    storedData && storedData.length > 0 ? setProductRecordsData(storedData) : getProductsRecordsData();
+  }, [getProductsRecordsData, storedData]);
+
+  console.log("filtereRecordsData => ", filtereRecordsData);
 
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
         <Header title="Product Records" subtitle="All the products are listed accordingly" />
 
-        <Box>
-          {/* <Button
+        <FlexBetween backgroundColor="yellow" flexDirection="column" alignItems="flex-end !important">
+          <FlexBetween backgroundColor={theme.palette.background.alt} borderRadius="9px" gap="3rem" p="0.1rem 1.5rem">
+            <InputBase
+              name="search"
+              value={searchFilterQuery}
+              onChange={handleSearchFilterChange}
+              placeholder="Search by username ..."
+            />
+            <IconButton>
+              <Search />
+            </IconButton>
+          </FlexBetween>
+        </FlexBetween>
+
+        {/* <Box>
+          <Button
             sx={{
               backgroundColor: theme.palette.secondary.light,
               color: theme.palette.background.alt,
@@ -45,12 +103,12 @@ const ProductRecords: React.FC = (): JSX.Element => {
               fontWeight: "bold",
               padding: "10px 20px",
             }}
-            onClick={}
+            onClick={() => null}
           >
             <DownloadOutlined sx={{ mr: "10px" }} />
             Download Records
-          </Button> */}
-        </Box>
+          </Button>
+        </Box> */}
       </FlexBetween>
 
       <Box></Box>
@@ -85,8 +143,10 @@ const ProductRecords: React.FC = (): JSX.Element => {
         <DataGrid<TProductDataGrid>
           // loading={isLoading || !data}
           getRowId={(row) => row.username + uniqueId}
-          rows={productRecordsData || []}
+          rows={filtereRecordsData || []}
           columns={productsDataGridAttributes}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           slots={{
             toolbar: CustomExportToolbar,
           }}
