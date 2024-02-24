@@ -9,7 +9,7 @@ const BarChart = ({ data }: any) => {
       margin={{ top: 40, right: 20, bottom: 120, left: 50 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
-      colors="#3182CE"
+      colors="#5D3FD3"
       labelTextColor="white"
       animate={true}
       enableLabel={false}
