@@ -73,8 +73,6 @@ const ProductRecords: React.FC = (): JSX.Element => {
     storedData && storedData.length > 0 ? setProductRecordsData(storedData) : getProductsRecordsData();
   }, [getProductsRecordsData, storedData]);
 
-  console.log("filtereRecordsData => ", filtereRecordsData);
-
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>

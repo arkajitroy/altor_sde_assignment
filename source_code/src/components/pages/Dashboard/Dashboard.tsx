@@ -126,9 +126,7 @@ const Dashboard: React.FC = (): JSX.Element => {
         setVehicleCountRenderData(_filteredData);
       }
       if (barChartFilter === "sdk_int") {
-        console.log("yuhuuuu");
         const _filteredData = services.filteration.getCategoryCountBarChart(dataSet, zone);
-        console.log("yuhuuuu _filteredData", _filteredData);
         setSDKCountRenderData(_filteredData);
       }
     },
@@ -222,8 +220,6 @@ const Dashboard: React.FC = (): JSX.Element => {
     handleSetFilteredDataToPieChart,
     handleSetFilteredDataToBarChart,
   ]);
-
-  console.log("sdkCountBarDST =======> ", sdkCountRenderData);
 
   return (
     <Box m="1.5rem 2.5rem">
