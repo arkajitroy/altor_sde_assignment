@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { TSidebarProps } from "../../../@types/TSidebar.types";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -13,22 +12,10 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { ChevronLeft, ChevronRightOutlined, HomeOutlined, ReceiptLongOutlined } from "@mui/icons-material";
 
-import {
-  ChevronLeft,
-  ChevronRightOutlined,
-  HomeOutlined,
-  ShoppingCartOutlined,
-  Groups2Outlined,
-  ReceiptLongOutlined,
-  PointOfSaleOutlined,
-  TodayOutlined,
-  CalendarMonthOutlined,
-  AdminPanelSettingsOutlined,
-  TrendingUpOutlined,
-  PieChartOutlined,
-} from "@mui/icons-material";
 import FlexBetween from "../../../globalStyles/FlexBetween";
+import { TSidebarProps } from "../../../@types/TSidebar.types";
 
 const navItems = [
   {
@@ -36,64 +23,14 @@ const navItems = [
     icon: <HomeOutlined />,
     routes: "/",
   },
-  // {
-  //   text: "Client Facing",
-  //   icon: null,
-  // },
   {
-    text: "Products",
-    icon: <ShoppingCartOutlined />,
-    routes: "/products",
-  },
-  // {
-  //   text: "Customers",
-  //   icon: <Groups2Outlined />,
-  // },
-  {
-    text: "Product Records",
+    text: "Data Records",
     icon: <ReceiptLongOutlined />,
     routes: "/product-records",
   },
-  // {
-  //   text: "Sales",
-  //   icon: null,
-  // },
-  // {
-  //   text: "Overview",
-  //   icon: <PointOfSaleOutlined />,
-  // },
-  // {
-  //   text: "Daily",
-  //   icon: <TodayOutlined />,
-  // },
-  // {
-  //   text: "Monthly",
-  //   icon: <CalendarMonthOutlined />,
-  // },
-  // {
-  //   text: "Breakdown",
-  //   icon: <PieChartOutlined />,
-  // },
-  // {
-  //   text: "Management",
-  //   icon: null,
-  // },
-  // {
-  //   text: "Admin",
-  //   icon: <AdminPanelSettingsOutlined />,
-  // },
-  // {
-  //   text: "Performance",
-  //   icon: <TrendingUpOutlined />,
-  // },
 ];
 
-const Sidebar: React.FC<TSidebarProps> = ({
-  showSidebar,
-  setShowSidebar,
-  drawerWidth,
-  isNonMobile,
-}): JSX.Element => {
+const Sidebar: React.FC<TSidebarProps> = ({ showSidebar, setShowSidebar, drawerWidth, isNonMobile }): JSX.Element => {
   const [active, setActive] = useState("");
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -155,21 +92,14 @@ const Sidebar: React.FC<TSidebarProps> = ({
                         setActive(routes);
                       }}
                       sx={{
-                        backgroundColor:
-                          active === routes ? theme.palette.secondary[300] : "transparent",
-                        color:
-                          active === routes
-                            ? theme.palette.primary[600]
-                            : theme.palette.secondary[100],
+                        backgroundColor: active === routes ? theme.palette.secondary[300] : "transparent",
+                        color: active === routes ? theme.palette.primary[600] : theme.palette.secondary[100],
                       }}
                     >
                       <ListItemIcon
                         sx={{
                           ml: "2rem",
-                          color:
-                            active === routes
-                              ? theme.palette.primary[600]
-                              : theme.palette.secondary[200],
+                          color: active === routes ? theme.palette.primary[600] : theme.palette.secondary[200],
                         }}
                       >
                         {icon}
