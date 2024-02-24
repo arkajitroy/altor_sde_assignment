@@ -1,6 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 import { API_ROUTE } from "../../../configs/api.config";
@@ -15,6 +25,7 @@ import { TBarChartTempState, TPieChartTempState } from "../../../@types/TDashboa
 import { zoneLists } from "../../../constants/dataProperties";
 import { services } from "../../../services";
 import { TBarChartDistribution, TPieChartDistribution, TZoneFilter } from "../../../@types/TCharts.type";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = (): JSX.Element => {
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
@@ -53,9 +64,9 @@ const Dashboard: React.FC = (): JSX.Element => {
     storageType: "sessionStorage",
   });
   const { result, error } = useFetch({ url: API_ROUTE });
-
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const getProductsRecordsData = useCallback(async () => {
     try {
@@ -184,6 +195,8 @@ const Dashboard: React.FC = (): JSX.Element => {
     setVehicleCCAndSDKCountRenderData(parsedData);
   }, [productRecordsData, services]);
 
+  //========================================= (useEffects) ===============================================
+
   // Fetching Data from API & LocalStorage
   useEffect(() => {
     storedData && storedData.length > 0 ? setProductRecordsData(storedData) : getProductsRecordsData();
@@ -243,9 +256,8 @@ const Dashboard: React.FC = (): JSX.Element => {
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
       >
-        {/* ====================== ROW 1 ( 2 PIE AND 1 BAR GRAPH) ===*/}
-
-        {/* ====================== PIE-CHART ========================*/}
+        {/* ====================== 1st ROW OF THE DASHBOARD ======================== */}
+        {/* ====================== PIE-CHART ========================================*/}
         <Box
           gridColumn="span 4"
           gridRow="span 3"
@@ -255,8 +267,8 @@ const Dashboard: React.FC = (): JSX.Element => {
           component={""}
         >
           <FlexBetween>
-            <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
-              Device Brand
+            <Typography variant="h5" sx={{ color: theme.palette.secondary[200] }}>
+              Device Brand Distribuition
             </Typography>
             <FormControl sx={{ width: "40%" }}>
               <InputLabel id="demo-simple-select-label">Zone</InputLabel>
@@ -279,7 +291,7 @@ const Dashboard: React.FC = (): JSX.Element => {
           </FlexBetween>
           <PieChart pieData={deviceBrandRenderData} />
         </Box>
-        {/* ====================== BAR-CHART ========================*/}
+        {/* ====================== BAR-CHART ========================================*/}
         <Box
           gridColumn="span 4"
           gridRow="span 3"
@@ -289,8 +301,8 @@ const Dashboard: React.FC = (): JSX.Element => {
           component={""}
         >
           <FlexBetween>
-            <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
-              Device Brand
+            <Typography variant="h5" sx={{ color: theme.palette.secondary[200] }}>
+              Vehicle Brand Distribuition
             </Typography>
             <FormControl sx={{ width: "40%" }}>
               <InputLabel id="demo-simple-select-label">Zone</InputLabel>
@@ -313,7 +325,7 @@ const Dashboard: React.FC = (): JSX.Element => {
           </FlexBetween>
           <BarChart data={vehicleCountRenderData} />
         </Box>
-        {/* ====================== PIE-CHART ========================*/}
+        {/* ====================== PIE-CHART ========================================*/}
         <Box
           gridColumn="span 4"
           gridRow="span 3"
@@ -323,8 +335,8 @@ const Dashboard: React.FC = (): JSX.Element => {
           component={""}
         >
           <FlexBetween>
-            <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
-              Vehicle Brand
+            <Typography variant="h5" sx={{ color: theme.palette.secondary[200] }}>
+              Vehicle Brand Distribuition
             </Typography>
             <FormControl sx={{ width: "40%" }}>
               <InputLabel id="demo-simple-select-label">Zone</InputLabel>
@@ -348,8 +360,8 @@ const Dashboard: React.FC = (): JSX.Element => {
           <PieChart pieData={vehicleBrandRenderData} />
         </Box>
 
-        {/* ================================================= ROW 2 =====================================================*/}
-        {/* ====================== PIE-CHART ========================*/}
+        {/* ====================== 2nd ROW OF THE DASHBOARD ======================== */}
+        {/* ====================== PIE-CHART ========================================*/}
         <Box
           gridColumn="span 6"
           gridRow="span 2"
@@ -360,7 +372,7 @@ const Dashboard: React.FC = (): JSX.Element => {
         >
           <FlexBetween>
             <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
-              Vehicle CC
+              Vehicle CC Distribuition
             </Typography>
             <FormControl sx={{ width: "40%" }}>
               <InputLabel id="demo-simple-select-label">Zone</InputLabel>
@@ -389,13 +401,13 @@ const Dashboard: React.FC = (): JSX.Element => {
           borderRadius="0.55rem"
           component={""}
         >
-          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            Sales By Category
+          <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
+            Vehicle CC and SDK Distribution
           </Typography>
           <StackedBarChart data={vehicleCCAndSDKCountRenderData} />
         </Box>
 
-        {/* =================================== BAR CHART ========================================= */}
+        {/* ==================== BAR CHART ========================================= */}
         <Box
           gridColumn="span 6"
           gridRow="span 2"
@@ -406,7 +418,7 @@ const Dashboard: React.FC = (): JSX.Element => {
         >
           <FlexBetween>
             <Typography variant="h4" sx={{ color: theme.palette.secondary[200] }}>
-              Device Brand
+              SDK Handset Distribuition
             </Typography>
             <FormControl sx={{ width: "40%" }}>
               <InputLabel id="demo-simple-select-label">Zone</InputLabel>
@@ -426,8 +438,8 @@ const Dashboard: React.FC = (): JSX.Element => {
           <BarChart data={sdkCountRenderData} />
         </Box>
 
-        {/* ================================================= ROW 3 =====================================================*/}
-        {/* ====================== DATA-GRID ========================*/}
+        {/* ====================== 2nd ROW OF THE DASHBOARD ======================== */}
+        {/* ====================== DATA GRID ========================================*/}
         <Box
           gridColumn="span 12"
           gridRow="span 2"
@@ -457,6 +469,31 @@ const Dashboard: React.FC = (): JSX.Element => {
             },
           }}
         >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              margin: "1rem 0rem",
+            }}
+          >
+            <Typography sx={{ fontSize: 20, color: theme.palette.secondary[200] }}>Data Records</Typography>
+            <button
+              style={{
+                backgroundColor: "black",
+                border: "none",
+                padding: "0.7rem 1.5rem",
+                borderRadius: "10rem",
+                color: "white",
+                cursor: "pointer",
+              }}
+              onClick={() => navigate("/data-records")}
+            >
+              View in Details
+            </button>
+          </Box>
+
           <DataGrid<TProductDataGrid>
             // loading={isLoading || !data}
             getRowId={(row) => row.username}

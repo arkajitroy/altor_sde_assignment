@@ -17,7 +17,7 @@ import { ChevronLeft, ChevronRightOutlined, HomeOutlined, ReceiptLongOutlined } 
 import FlexBetween from "../../../globalStyles/FlexBetween";
 import { TSidebarProps } from "../../../@types/TSidebar.types";
 
-const navItems = [
+const sidebarItems = [
   {
     text: "Dashboard",
     icon: <HomeOutlined />,
@@ -26,7 +26,7 @@ const navItems = [
   {
     text: "Data Records",
     icon: <ReceiptLongOutlined />,
-    routes: "/product-records",
+    routes: "/data-records",
   },
 ];
 
@@ -62,10 +62,11 @@ const Sidebar: React.FC<TSidebarProps> = ({ showSidebar, setShowSidebar, drawerW
           <Box width="100%">
             <Box m="1.5rem 2rem 2rem 3rem">
               <FlexBetween color={theme.palette.secondary.main}>
-                <Box display="flex" alignItems="center" gap="0.5rem">
+                <Box display="flex" alignItems="center" gap="0.5rem" flexDirection="column">
                   <Typography variant="h4" fontWeight="bold">
                     DataVisioX
                   </Typography>
+                  <span>Data Visualization</span>
                 </Box>
                 {!isNonMobile && (
                   <IconButton onClick={() => setShowSidebar(!showSidebar)}>
@@ -75,7 +76,7 @@ const Sidebar: React.FC<TSidebarProps> = ({ showSidebar, setShowSidebar, drawerW
               </FlexBetween>
             </Box>
             <List>
-              {navItems.map(({ text, icon, routes }) => {
+              {sidebarItems.map(({ text, icon, routes }) => {
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>

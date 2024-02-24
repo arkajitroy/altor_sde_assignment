@@ -20,7 +20,7 @@ const CustomMenuToolbar = () => {
   );
 };
 
-const ProductRecords: React.FC = (): JSX.Element => {
+const DataRecords: React.FC = (): JSX.Element => {
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
   const [filtereRecordsData, setFilteredRecordsData] = useState<TProductDataGrid[]>([]);
   const [searchFilterQuery, setSearchFilterQuery] = useState<string>("");
@@ -76,7 +76,7 @@ const ProductRecords: React.FC = (): JSX.Element => {
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
-        <Header title="Product Records" subtitle="All the products are listed accordingly" />
+        <Header title="Data Records" subtitle="All the datas are listed accordingly" />
 
         <FlexBetween backgroundColor="yellow" flexDirection="column" alignItems="flex-end !important">
           <FlexBetween backgroundColor={theme.palette.background.alt} borderRadius="9px" gap="3rem" p="0.1rem 1.5rem">
@@ -154,4 +154,4 @@ const ProductRecords: React.FC = (): JSX.Element => {
   );
 };
 
-export default ProductRecords;
+export default DataRecords;
