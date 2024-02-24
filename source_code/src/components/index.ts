@@ -5,7 +5,6 @@ export { default as ProductRecords } from "./pages/ProductRecords/ProductRecords
 
 // ============================= (LAYOUTS COMPONENTS) =================================
 export { default as Navbar } from "./layouts/Navbar/Navbar";
-export { default as Footer } from "./layouts/Footer/Footer";
 export { default as Sidebar } from "./layouts/Sidebar/Sidebar";
 export { default as AppLayout } from "./layouts/AppLayout/AppLayout";
 

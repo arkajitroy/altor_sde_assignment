@@ -17,8 +17,8 @@ const App: React.FC = () => {
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/product-records" element={<ProductRecords />} />
-              <Route path="*" element={<Error404Page />} />
             </Route>
+            <Route path="*" element={<Error404Page />} />
           </Routes>
         </ThemeProvider>
       </Router>

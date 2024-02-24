@@ -16,8 +16,6 @@ import { zoneLists } from "../../../constants/dataProperties";
 import { services } from "../../../services";
 import { TBarChartDistribution, TPieChartDistribution, TZoneFilter } from "../../../@types/TCharts.type";
 
-import "./dashboard.scss";
-
 const Dashboard: React.FC = (): JSX.Element => {
   const [productRecordsData, setProductRecordsData] = useState<TProductDataGrid[]>([]);
   // ================================== (DATA RENDER STATE) =====================================
