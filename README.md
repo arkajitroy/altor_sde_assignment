@@ -1,11 +1,11 @@
-### Documentation for Data Visualization Dashboard
+# Documentation for Data Visualization Dashboard
 
 This documentation outlines the structure and components of the dashboard project developed for **Altor**, as part of the hiring process for the **SDE Frontend Role**. The dashboard project focuses on data visualization components to provide insightful representations of data for Altor's needs.
 
 **Submitted by:** Arkajit Roy (arkajitroy11.official@gmail.com)
 **Applied For:** SDE-Frontend Role
 
-#### 📌 Tech stack used for this project
+### 📌 Tech stack used for this project
 
 | Libraries Used For            | Details                                                                                                                                           |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -33,13 +33,13 @@ After installation of all dependencies start the server from the terminal.
 npm run dev
 ```
 
-### 📌 Overall Summary of the project
+## 📌 Overall Summary of the project
 
-#### :star: Homepage (Main Dashboard)
+### :star: Homepage (Main Dashboard)
 
 This is first glimpse of our Dashboard Application, your gateway to a wealth of informative charts meticulously crafted to meet the specifications outlined in our assignment. Dive into a visual feast of multiple charts, each meticulously designed to depict crucial data points, as per our assignment requirements.
 
-##### :small_orange_diamond: Details about the Chart
+#### :small_orange_diamond: Details about the Chart
 
 **01. Device Brand Distribution over Zone(s) - Pie Chart:**
 This Offers a pie chart representation showcasing the percentage distribution of each device brand. Includes a zone-based filter allowing users to view data specific to selected zones.
@@ -66,7 +66,7 @@ Implements a stacked bar chart to compare the count or distribution between zone
 
 <img src="./github/main_dashboard_page_2.png" alt="Logo">
 
-#### :star: Data Records Page (Data-Grid Representation)
+### :star: Data Records Page (Data-Grid Representation)
 
 This is the Data Grid page, a centralized hub housing all records meticulously stored for your convenience. Our feature-rich Data Grid component offers seamless access to vast datasets, coupled with built-in sorting and filtering functionalities for effortless data exploration and analysis.
 
@@ -82,29 +82,29 @@ For example, if I input `user_23`, the system retrieves records containing user_
 
 <img src="./github/username_filteration_searchbar.png" alt="Logo">
 
-##### :small_orange_diamond: CSV Download Feature
+#### :small_orange_diamond: CSV Download Feature
 
 Additionally, we offer a convenient feature allowing users to download the entire dataset in CSV format, enabling seamless storage and access on their local systems. This built-in functionality is seamlessly integrated into the Material UI Grid, ensuring effortless data management at your fingertips.
 
 <img src="./github/download_csv_format.png" alt="Logo">
 
-###### Sample Output of the CSV
+#### Sample Output of the CSV
 
 <img src="./github/downloaded_csv_sample.png" alt="Logo">
 
-#### :star: Additional Points and Information
+### :star: Additional Points and Information
 
 There are some additional information which i have used and implemented in this project
 
-##### :small_orange_diamond: Data Catching
+#### :small_orange_diamond: Data Catching
 
 To optimize data retrieval and enhance application performance, `sessionStorage`, a browser-based web storage mechanism, has been leveraged. This efficient solution caches API responses, enabling swift data fetching and seamless app operation without the need for repetitive API calls.
 
-##### :small_orange_diamond: UI Components
+#### :small_orange_diamond: UI Components
 
 The project harnesses the power of `MaterialUI v5` for its UI components, providing an array of advanced features tailored to elevate user experience. With built-in responsive capabilities, Material UI v5 streamlines the development process, eliminating the need for manual media queries in CSS and ensuring seamless responsiveness across devices.
 
-#### :star: Endnote
+## :star: Endnote
 
 Thank you for the opportunity to interview for the SDE Frontend Role and I look forward to your feedback. If you have any questions or require further clarification on any aspect of the submission, please don't hesitate to reach out. I am more than happy to provide any assistance needed.
 
